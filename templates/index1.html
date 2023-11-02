@@ -1,0 +1,684 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>CalPi1</title>
+    <link rel="stylesheet" href="./static/ovenstyle.css">
+</head>
+<body>
+
+
+<table>
+    <tr>
+        <td><canvas id="canvas1" width="560" height="355"></canvas></td>
+        <td><canvas id="canvas2" width="560" height="355"></canvas></td>
+        <td><canvas id="canvas3" width="560" height="355"></canvas></td>
+    </tr>
+    <tr>
+        <td><canvas id="canvas4" width="560" height="355"></canvas></td>
+        <td><canvas id="canvas5" width="560" height="355"></canvas></td>
+        <td><canvas id="canvas6" width="560" height="355"></canvas></td>
+    </tr>
+</table>
+
+<!-- <textarea id="text1" cols="100" rows="10"></textarea> -->
+
+<table class="table-status">
+    <tr>
+        <th>Run</th>
+        <th>Upper</th>
+        <th>Lower</th>
+        <th>Fan</th>
+        <th>Run #</th>
+        <th>Set</th>
+        <th>Cmd</th>
+        <th>Avg</th>
+        <th>Error</th>
+        <th>Int</th>
+        <th>Ton</th>
+        <th>Top</th>
+        <th>Bottom</th>
+        <th>Front</th>
+        <th>Back</th>
+        <th>Probe1</th>
+        <th>Probe2</th>
+        <th>Pi</th>
+        <th>SSRs</th>
+    </tr>
+    <tr>
+        <td><label class="toggle">
+            <input type="checkbox" id="onoff" {% if initial_values['onoff'] %} checked {% endif %}>
+            <span class="slider"></span>
+            <span class="labels" data-on="ON" data-off="OFF"></span>
+        </label></td>
+        <td><label class="toggle">
+            <input type="checkbox" id="enableupper" {% if initial_values['enableupper'] %} checked {% endif %}>
+            <span class="slider"></span>
+            <span class="labels" data-on="ON" data-off="OFF"></span>
+        </label></td>
+        <td><label class="toggle">
+            <input type="checkbox" id="enablelower" {% if initial_values['enablelower'] %} checked {% endif %}>
+            <span class="slider"></span>
+            <span class="labels" data-on="ON" data-off="OFF"></span>
+        </label></td>
+        <td><label class="toggle">
+            <input type="checkbox" id="enablefan" {% if initial_values['enablefan'] %} checked {% endif %}>
+            <span class="slider"></span>
+            <span class="labels" data-on="ON" data-off="OFF"></span>
+        </label></td>
+        <td id="run_number"> {{ initial_values['run_number'] }}</td>
+        <td><input id="setpoint" type="number" value={{ initial_values['setpoint'] }}></td>
+        <!-- <td><input id="run_number" type="number"></td>
+        <td><input id="setpoint" type="number"></td> -->
+        <td id="tCommand"></td>
+        <td id="tAvg"></td>
+        <td id="tError"></td>
+        <td id="tIntegral"></td>
+        <td id="tTon"></td>
+        <td id="tTop"></td>
+        <td id="tBottom"></td>
+        <td id="tFront"></td>
+        <td id="tBack"></td>
+        <td id="tProbe1"></td>
+        <td id="tProbe2"></td>
+        <td id="tPi"></td>
+        <td id="tSSRs"></td>
+    </tr>
+</table>
+<table class=".table-run">
+    <td><input type="text", id="test_comment" value="{{ initial_values['run_comment'] }}"></td>
+    <td id="test_start" >Started at: {{ initial_values['run_start'] }}</td>
+</table>
+
+
+<!--suppress JSUnresolvedLibraryURL -->
+<script src="static/jquery.min.js"></script>
+<!--suppress JSUnresolvedLibraryURL -->
+<script src="static/Chart.min.js"></script>
+<script src="static/socket.io.js"></script>
+
+<script>
+    $(document).ready(function () {
+
+        const config1 = {
+            type: 'line',
+            data: {
+                labels: [],
+                datasets: [
+                {
+                    label: "Top",
+                    backgroundColor: 'rgb(255, 0, 0)',
+                    borderColor: 'rgb(255, 0, 0)',
+                    data: [],
+                    fill: false,
+                },
+                {
+                    label: "Bottom",
+                    backgroundColor: 'rgb(0, 255, 0)',
+                    borderColor: 'rgb(0, 255, 0)',
+                    data: [],
+                    fill: false,
+                },
+                {
+                    label: "Front",
+                    backgroundColor: 'rgb(0, 0, 255)',
+                    borderColor: 'rgb(0, 0, 255)',
+                    data: [],
+                    fill: false,
+                },
+                {
+                    label: "Back",
+                    backgroundColor: 'rgb(128, 128, 128)',
+                    borderColor: 'rgb(128, 128, 128)',
+                    data: [],
+                    fill: false,
+                }
+                ],
+            },
+            options: {
+                responsive: true,
+                title: {
+                    display: true,
+                    text: 'Chamber Temperatures'
+                },
+                tooltips: {
+                    mode: 'null',
+                    intersect: false,
+                },
+                hover: {
+                    mode: 'null',
+                    intersect: true
+                },
+                scales: {
+                    xAxes: [{
+                        display: true,
+                        scaleLabel: {
+                            display: false,
+                            labelString: 'Time'
+                        },
+                        ticks:{
+                            autoSkip: true,
+                            maxTicksLimit: 10
+                        }
+                    }],
+                    yAxes: [{
+                        display: true,
+                        scaleLabel: {
+                            display: true,
+                            labelString: 'Value'
+                        }
+                    }]
+                }
+            }
+        };
+        const config2 = {
+            type: 'line',
+            data: {
+                labels: [],
+                datasets: [
+                {
+                    label: "Probe 1",
+                    backgroundColor: 'rgb(255, 0, 0)',
+                    borderColor: 'rgb(255, 0, 0)',
+                    data: [],
+                    fill: false,
+                },
+                {
+                    label: "Probe 2",
+                    backgroundColor: 'rgb(0, 255, 0)',
+                    borderColor: 'rgb(0, 255, 0)',
+                    data: [],
+                    fill: false,
+                }
+                ],
+            },
+            options: {
+                responsive: true,
+                title: {
+                    display: true,
+                    text: 'Probe Temperatures'
+                },
+                tooltips: {
+                    mode: 'null',
+                    intersect: false,
+                },
+                hover: {
+                    mode: 'null',
+                    intersect: true
+                },
+                scales: {
+                    xAxes: [{
+                        display: true,
+                        scaleLabel: {
+                            display: false,
+                            labelString: 'Time'
+                        },
+                        ticks:{
+                            autoSkip: true,
+                            maxTicksLimit: 10
+                        }
+                    }],
+                    yAxes: [{
+                        display: true,
+                        scaleLabel: {
+                            display: true,
+                            labelString: 'Value'
+                        }
+                    }]
+                }
+            }
+        };
+        const config3 = {
+            type: 'line',
+            data: {
+                labels: [],
+                datasets: [
+                {
+                    label: "Pi",
+                    backgroundColor: 'rgb(255, 0, 0)',
+                    borderColor: 'rgb(255, 0, 0)',
+                    data: [],
+                    fill: false,
+                },
+                {
+                    label: "Heatsink",
+                    backgroundColor: 'rgb(0, 255, 0)',
+                    borderColor: 'rgb(0, 255, 0)',
+                    data: [],
+                    fill: false,
+                }
+                ],
+            },
+            options: {
+                responsive: true,
+                title: {
+                    display: true,
+                    text: 'Controller Temperatures'
+                },
+                tooltips: {
+                    mode: 'null',
+                    intersect: false,
+                },
+                hover: {
+                    mode: 'null',
+                    intersect: true
+                },
+                scales: {
+                    xAxes: [{
+                        display: true,
+                        scaleLabel: {
+                            display: false,
+                            labelString: 'Time'
+                        },
+                        ticks:{
+                            autoSkip: true,
+                            maxTicksLimit: 10
+                        }
+                    }],
+                    yAxes: [{
+                        display: true,
+                        scaleLabel: {
+                            display: true,
+                            labelString: 'Value'
+                        }
+                    }]
+                }
+            }
+        };
+        const config4= {
+            type: 'line',
+            data: {
+                labels: [],
+                datasets: [
+                {
+                    label: "Setpoint",
+                    backgroundColor: 'rgb(0, 0, 255)',
+                    borderColor: 'rgb(0, 0, 255)',
+                    data: [],
+                    fill: false,
+                },
+                {
+                    label: "Command",
+                    backgroundColor: 'rgb(0, 255, 0)',
+                    borderColor: 'rgb(0, 255, 0)',
+                    data: [],
+                    fill: false,
+                },
+                {
+                    label: "Average",
+                    backgroundColor: 'rgb(255, 0, 0)',
+                    borderColor: 'rgb(255, 0, 0)',
+                    data: [],
+                    fill: false,
+                }
+                ],
+            },
+            options: {
+                responsive: true,
+                title: {
+                    display: true,
+                    text: 'Temperature'
+                },
+                tooltips: {
+                    mode: 'null',
+                    intersect: false,
+                },
+                hover: {
+                    mode: 'null',
+                    intersect: true
+                },
+                scales: {
+                    xAxes: [{
+                        display: true,
+                        scaleLabel: {
+                            display: false,
+                            labelString: 'Time'
+                        },
+                        ticks:{
+                            autoSkip: true,
+                            maxTicksLimit: 10
+                        }
+                    }],
+                    yAxes: [{
+                        display: true,
+                        scaleLabel: {
+                            display: true,
+                            labelString: 'Value'
+                        }
+                    }]
+                }
+            }
+        };
+        const config5 = {
+            type: 'line',
+            data: {
+                labels: [],
+                datasets: [
+                {
+                    label: "Error",
+                    backgroundColor: 'rgb(255, 0, 0)',
+                    borderColor: 'rgb(255, 0, 0)',
+                    data: [],
+                    fill: false,
+                },
+                {
+                    label: "Integral",
+                    backgroundColor: 'rgb(0, 255, 0)',
+                    borderColor: 'rgb(0, 255, 0)',
+                    data: [],
+                    fill: false,
+                }
+                ],
+            },
+            options: {
+                responsive: true,
+                title: {
+                    display: true,
+                    text: 'Error',
+                },
+                tooltips: {
+                    mode: 'null',
+                    intersect: false,
+                },
+                hover: {
+                    mode: 'null',
+                    intersect: true
+                },
+                scales: {
+                    xAxes: [{
+                        display: true,
+                        scaleLabel: {
+                            display: false,
+                            labelString: 'Time'
+                        },
+                        ticks:{
+                            autoSkip: true,
+                            maxTicksLimit: 10
+                        }
+                    }],
+                    yAxes: [{
+                        display: true,
+                        scaleLabel: {
+                            display: true,
+                            labelString: 'Value'
+                        }
+                    }]
+                }
+            }
+        };    
+        const config6= {
+            type: 'line',
+            data: {
+                labels: [],
+                datasets: [
+                {
+                    label: "On Time x 10",
+                    backgroundColor: 'rgb(0, 0, 255)',
+                    borderColor: 'rgb(0, 0, 255)',
+                    data: [],
+                    fill: false,
+                },
+                {
+                    label: "Error",
+                    backgroundColor: 'rgb(255, 0, 0)',
+                    borderColor: 'rgb(255, 0, 0)',
+                    data: [],
+                    fill: false,
+                }
+                ],
+            },
+            options: {
+                responsive: true,
+                title: {
+                    display: true,
+                    text: 'Heaters'
+                },
+                tooltips: {
+                    mode: 'null',
+                    intersect: false,
+                },
+                hover: {
+                    mode: 'null',
+                    intersect: true
+                },
+                scales: {
+                    xAxes: [{
+                        display: true,
+                        scaleLabel: {
+                            display: false,
+                            labelString: 'Time'
+                        },
+                        ticks:{
+                            autoSkip: true,
+                            maxTicksLimit: 10
+                        }
+                    }],
+                    yAxes: [{
+                        display: true,
+                        scaleLabel: {
+                            display: true,
+                            labelString: 'Value'
+                        }
+                    }]
+                }
+            }
+        };
+
+        const context1 = document.getElementById('canvas1').getContext('2d');
+        const context2 = document.getElementById('canvas2').getContext('2d');
+        const context3 = document.getElementById('canvas3').getContext('2d');
+        const context4 = document.getElementById('canvas4').getContext('2d');
+        const context5 = document.getElementById('canvas5').getContext('2d');
+        const context6 = document.getElementById('canvas6').getContext('2d');
+
+        const lineChart1 = new Chart(context1, config1);
+        const lineChart2 = new Chart(context2, config2);
+        const lineChart3 = new Chart(context3, config3);
+        const lineChart4 = new Chart(context4, config4);
+        const lineChart5 = new Chart(context5, config5);
+        const lineChart6 = new Chart(context6, config6);
+
+        // Connect to the Flask-SocketIO server
+        const socket = io.connect('http://' + document.domain + ':' + location.port);
+
+        // Emit a change in setpoint, limit the range
+        const setpoint = document.getElementById('setpoint');
+        setpoint.onchange = function(){
+            var val = Number(setpoint.value);
+            if(val<0)val=0;
+            if(val>230)val=230;
+            setpoint.value = val;
+            socket.emit('update_setpoint',val);
+        }
+
+        // Emit a change in on/off switch
+        const onoff = document.getElementById('onoff');
+        const test_comment = document.getElementById('test_comment');
+        onoff.onchange = function(){
+            var onoffval = onoff.checked;
+            socket.emit('update_onoff',onoffval,test_comment.value);
+        }
+
+        // Emit a change in upper enable
+        const enableupper = document.getElementById('enableupper');
+        enableupper.onchange = function(){
+            var upperval = enableupper.checked;
+            socket.emit('update_upper',upperval);
+        }
+
+        // Emit a change in lower enable
+        const enablelower = document.getElementById('enablelower');
+        enablelower.onchange = function(){
+            var lowerval = enablelower.checked;
+            socket.emit('update_lower',lowerval);
+        }
+
+        // Emit a change in fan enable
+        const enablefan = document.getElementById('enablefan');
+        enablefan.onchange = function(){
+            var fanval = enablefan.checked;
+            socket.emit('update_fan',fanval);
+        }
+
+        // Listen for the 'init_chart' event from the server
+        // clear all the chart data
+        socket.on('reset_chart', function () {
+
+                config1.data.labels = [];
+                config1.data.datasets[0].data = [];        
+                config1.data.datasets[1].data = [];
+                config1.data.datasets[2].data = [];
+                config1.data.datasets[3].data = [];
+                lineChart1.update();
+
+                config2.data.labels = [];
+                config2.data.datasets[0].data = [];
+                config2.data.datasets[1].data = [];
+                lineChart2.update();
+
+                config3.data.labels = [];
+                config3.data.datasets[0].data = [];
+                config3.data.datasets[1].data = [];
+                lineChart3.update();
+
+                config4.data.labels = [];
+                config4.data.datasets[0].data = [];
+                config4.data.datasets[1].data = [];
+                config4.data.datasets[2].data = [];
+                lineChart4.update();
+
+                config5.data.labels = [];
+                config5.data.datasets[0].data = [];
+                config5.data.datasets[1].data = [];
+                lineChart5.update();
+
+                config6.data.labels = [];
+                config6.data.datasets[0].data = [];
+                config6.data.datasets[1].data = [];
+            }
+        );
+
+       // Listen for the 'update_chart' event from the server
+       socket.on('init_chart', function (message) {
+            const data = JSON.parse(message);
+
+            // for debugging show the json data in a text box below the graphs
+            //document.getElementById('text1').innerHTML = message;
+
+            config1.data.labels.push(data.time);
+            config1.data.datasets[0].data.push(data.top);
+            config1.data.datasets[1].data.push(data.bottom);
+            config1.data.datasets[2].data.push(data.front);
+            config1.data.datasets[3].data.push(data.back);
+
+            config2.data.labels.push(data.time);
+            config2.data.datasets[0].data.push(data.probe1);
+            config2.data.datasets[1].data.push(data.probe2);
+
+            config3.data.labels.push(data.time);
+            config3.data.datasets[0].data.push(data.pi);
+            config3.data.datasets[1].data.push(data.heatsink);
+
+            config4.data.labels.push(data.time);
+            config4.data.datasets[0].data.push(data.setpoint);
+            config4.data.datasets[1].data.push(data.command);
+            config4.data.datasets[2].data.push(data.avg);
+
+            config5.data.labels.push(data.time);
+            config5.data.datasets[0].data.push(data.error);
+            config5.data.datasets[1].data.push(data.integral);
+
+            config6.data.labels.push(data.time);
+            config6.data.datasets[0].data.push(data.on_time*10);     // add some offset so both lines show
+            config6.data.datasets[1].data.push(data.error);
+
+       });
+
+        // Listen for the 'update_chart' event from the server
+        socket.on('update_chart', function (message) {
+            const data = JSON.parse(message);
+
+            // for debugging show the json data in a text box below the graphs
+            //document.getElementById('text1').innerHTML = message;
+
+            // following line controls the shifting of time axis                          
+            if (config1.data.labels.length === 10000) {
+                config1.data.labels.shift();
+                config2.data.labels.shift();
+                config3.data.labels.shift();
+                config4.data.labels.shift();
+                config5.data.labels.shift();
+                config6.data.labels.shift();
+                config1.data.datasets[0].data.shift();
+                config1.data.datasets[1].data.shift();
+                config1.data.datasets[2].data.shift();
+                config1.data.datasets[3].data.shift();
+                config2.data.datasets[0].data.shift();
+                config2.data.datasets[1].data.shift();
+                config3.data.datasets[0].data.shift();
+                config3.data.datasets[1].data.shift();
+                config4.data.datasets[0].data.shift();
+                config4.data.datasets[1].data.shift();
+                config4.data.datasets[2].data.shift();
+                config5.data.datasets[0].data.shift();
+                config5.data.datasets[1].data.shift();
+                config6.data.datasets[0].data.shift();
+                config6.data.datasets[1].data.shift();
+            }
+            config1.data.labels.push(data.time);
+            config1.data.datasets[0].data.push(data.top);
+            config1.data.datasets[1].data.push(data.bottom);
+            config1.data.datasets[2].data.push(data.front);
+            config1.data.datasets[3].data.push(data.back);
+            lineChart1.update();
+
+            config2.data.labels.push(data.time);
+            config2.data.datasets[0].data.push(data.probe1);
+            config2.data.datasets[1].data.push(data.probe2);
+            lineChart2.update();
+
+            config3.data.labels.push(data.time);
+            config3.data.datasets[0].data.push(data.pi);
+            config3.data.datasets[1].data.push(data.heatsink);
+            lineChart3.update();
+
+            config4.data.labels.push(data.time);
+            config4.data.datasets[0].data.push(data.setpoint);
+            config4.data.datasets[1].data.push(data.command);
+            config4.data.datasets[2].data.push(data.avg);
+            lineChart4.update();
+
+            config5.data.labels.push(data.time);
+            config5.data.datasets[0].data.push(data.error);
+            config5.data.datasets[1].data.push(data.integral);
+            lineChart5.update();
+
+            config6.data.labels.push(data.time);
+            config6.data.datasets[0].data.push(data.on_time*10);     // add some offset so both lines show
+            config6.data.datasets[1].data.push(data.error);
+            lineChart6.update();
+
+            // document.getElementById('setpoint').value = data.setpoint.toFixed(1);
+            document.getElementById('run_number').innerHTML = data.run_number;
+            document.getElementById('tCommand').innerHTML = data.command.toFixed(1);
+            document.getElementById('tAvg').innerHTML = data.avg.toFixed(1);
+            document.getElementById('tError').innerHTML = data.error.toFixed(1);
+            document.getElementById('tIntegral').innerHTML = data.integral.toFixed(1);
+            document.getElementById('tTon').innerHTML = data.on_time.toFixed(3);
+            document.getElementById('tTop').innerHTML = data.top.toFixed(1);
+            document.getElementById('tBottom').innerHTML = data.bottom.toFixed(1);
+            document.getElementById('tFront').innerHTML = data.front.toFixed(1)
+            document.getElementById('tBack').innerHTML = data.back.toFixed(1);
+            document.getElementById('tProbe1').innerHTML = data.probe1.toFixed(1);
+            document.getElementById('tProbe2').innerHTML = data.probe2.toFixed(1);
+            document.getElementById('tPi').innerHTML = data.pi.toFixed(1);
+            document.getElementById('tSSRs').innerHTML = data.ssr.toFixed(1);
+            document.getElementById('test_start').innerHTML = ["Started at: "+data.started];
+
+
+        });
+
+    });
+</script>
+</body>
+</html>                    

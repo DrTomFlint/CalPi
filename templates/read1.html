@@ -1,0 +1,255 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Read1</title>
+    <link rel="stylesheet" href="./static/ovenstyle.css">
+</head>
+<body>
+
+
+<table>
+    <tr>
+        <td><canvas id="canvas1" width="560" height="355"></canvas></td>
+        <td><canvas id="canvas2" width="560" height="355"></canvas></td>
+    </tr>
+</table>
+
+<!-- <textarea id="text1" cols="100" rows="10"></textarea> -->
+
+<table class="table-status">
+    <tr>
+        <th>Top</th>
+        <th>Bottom</th>
+        <th>Front</th>
+        <th>Back</th>
+        <th>Left</th>
+        <th>Right</th>
+        <th>Spare1</th>
+        <th>Spare2</th>
+    </tr>
+    <tr>
+        <td id="tTop"></td>
+        <td id="tBottom"></td>
+        <td id="tFront"></td>
+        <td id="tBack"></td>
+        <td id="tLeft"></td>
+        <td id="tRight"></td>
+        <td id="tSpare1"></td>
+        <td id="tSpare2"></td>
+    </tr>
+</table>
+
+<!--suppress JSUnresolvedLibraryURL -->
+<script src="static/jquery.min.js"></script>
+<!--suppress JSUnresolvedLibraryURL -->
+<script src="static/Chart.min.js"></script>
+<script src="static/socket.io.js"></script>
+
+<script>
+    $(document).ready(function () {
+
+        const config1 = {
+            type: 'line',
+            data: {
+                labels: [],
+                datasets: [
+                {
+                    label: "Top",
+                    backgroundColor: 'rgb(255, 0, 0)',
+                    borderColor: 'rgb(255, 0, 0)',
+                    data: [],
+                    fill: false,
+                },
+                {
+                    label: "Bottom",
+                    backgroundColor: 'rgb(0, 255, 0)',
+                    borderColor: 'rgb(0, 255, 0)',
+                    data: [],
+                    fill: false,
+                },
+                {
+                    label: "Front",
+                    backgroundColor: 'rgb(0, 0, 255)',
+                    borderColor: 'rgb(0, 0, 255)',
+                    data: [],
+                    fill: false,
+                },
+                {
+                    label: "Back",
+                    backgroundColor: 'rgb(255, 255, 0)',
+                    borderColor: 'rgb(255, 255, 0)',
+                    data: [],
+                    fill: false,
+                },
+                {
+                    label: "Left",
+                    backgroundColor: 'rgb(0, 255, 255)',
+                    borderColor: 'rgb(0, 255, 255)',
+                    data: [],
+                    fill: false,
+                },
+                {
+                    label: "Right",
+                    backgroundColor: 'rgb(128,128,128)',
+                    borderColor: 'rgb(128,128,128)',
+                    data: [],
+                    fill: false,
+                }
+                ],
+            },
+            options: {
+                responsive: true,
+                title: {
+                    display: true,
+                    text: 'Chamber Temperatures'
+                },
+                tooltips: {
+                    mode: 'null',
+                    intersect: false,
+                },
+                hover: {
+                    mode: 'null',
+                    intersect: true
+                },
+                scales: {
+                    xAxes: [{
+                        display: true,
+                        scaleLabel: {
+                            display: false,
+                            labelString: 'Time'
+                        },
+                        ticks:{
+                            autoSkip: true,
+                            maxTicksLimit: 10
+                        }
+                    }],
+                    yAxes: [{
+                        display: true,
+                        scaleLabel: {
+                            display: true,
+                            labelString: 'Value'
+                        }
+                    }]
+                }
+            }
+        };
+        const config2 = {
+            type: 'line',
+            data: {
+                labels: [],
+                datasets: [
+                {
+                    label: "Spare 1",
+                    backgroundColor: 'rgb(255, 0, 0)',
+                    borderColor: 'rgb(255, 0, 0)',
+                    data: [],
+                    fill: false,
+                },
+                {
+                    label: "Spare 2",
+                    backgroundColor: 'rgb(0, 255, 0)',
+                    borderColor: 'rgb(0, 255, 0)',
+                    data: [],
+                    fill: false,
+                }
+                ],
+            },
+            options: {
+                responsive: true,
+                title: {
+                    display: true,
+                    text: 'Probe Temperatures'
+                },
+                tooltips: {
+                    mode: 'null',
+                    intersect: false,
+                },
+                hover: {
+                    mode: 'null',
+                    intersect: true
+                },
+                scales: {
+                    xAxes: [{
+                        display: true,
+                        scaleLabel: {
+                            display: false,
+                            labelString: 'Time'
+                        },
+                        ticks:{
+                            autoSkip: true,
+                            maxTicksLimit: 10
+                        }
+                    }],
+                    yAxes: [{
+                        display: true,
+                        scaleLabel: {
+                            display: true,
+                            labelString: 'Value'
+                        }
+                    }]
+                }
+            }
+        };
+
+        const context1 = document.getElementById('canvas1').getContext('2d');
+        const context2 = document.getElementById('canvas2').getContext('2d');
+
+        const lineChart1 = new Chart(context1, config1);
+        const lineChart2 = new Chart(context2, config2);
+
+        // Connect to the Flask-SocketIO server
+        const socket = io.connect('http://' + document.domain + ':' + location.port);
+
+        // Listen for the 'update_chart' event from the server
+        socket.on('update_chart', function (message) {
+            const data = JSON.parse(message);
+
+            // for debugging show the json data in a text box below the graphs
+            //document.getElementById('text1').innerHTML = message;
+
+            // following line controls the shifting of time axis                          
+            if (config1.data.labels.length === 10000) {
+                config1.data.labels.shift();
+                config2.data.labels.shift();
+                config1.data.datasets[0].data.shift();
+                config1.data.datasets[1].data.shift();
+                config1.data.datasets[2].data.shift();
+                config1.data.datasets[3].data.shift();
+                config1.data.datasets[4].data.shift();
+                config1.data.datasets[5].data.shift();
+                config2.data.datasets[0].data.shift();
+                config2.data.datasets[1].data.shift();
+            }
+            config1.data.labels.push(data.time);
+            config1.data.datasets[0].data.push(data.top);
+            config1.data.datasets[1].data.push(data.bottom);
+            config1.data.datasets[2].data.push(data.front);
+            config1.data.datasets[3].data.push(data.back);
+            config1.data.datasets[4].data.push(data.left);
+            config1.data.datasets[5].data.push(data.right);
+            lineChart1.update();
+
+            config2.data.labels.push(data.time);
+            config2.data.datasets[0].data.push(data.spare1);
+            config2.data.datasets[1].data.push(data.spare2);
+            lineChart2.update();
+
+            // document.getElementById('setpoint').value = data.setpoint.toFixed(1);
+
+            document.getElementById('tTop').innerHTML = data.top.toFixed(1);
+            document.getElementById('tBottom').innerHTML = data.bottom.toFixed(1);
+            document.getElementById('tFront').innerHTML = data.front.toFixed(1)
+            document.getElementById('tBack').innerHTML = data.back.toFixed(1);
+            document.getElementById('tLeft').innerHTML = data.left.toFixed(1);
+            document.getElementById('tRight').innerHTML = data.right.toFixed(1);
+            document.getElementById('tSpare1').innerHTML = data.spare1.toFixed(1);
+            document.getElementById('tSpare2').innerHTML = data.spare2.toFixed(1);
+
+
+        });
+
+    });
+</script>
+</body>
+</html>                    
