@@ -7,36 +7,60 @@
 </head>
 <body>
 
-
+<!-- 560 width for 3 columns on screen -->
 <table>
     <tr>
-        <td><canvas id="canvas1" width="560" height="355"></canvas></td>
-        <td><canvas id="canvas2" width="560" height="355"></canvas></td>
+        <td><canvas id="canvas1" width="700" height="355"></canvas></td>
+        <td><canvas id="canvas2" width="700" height="355"></canvas></td>
+    </tr>
+    <tr>
+        <td><canvas id="canvas3" width="700" height="355"></canvas></td>
+        <td><canvas id="canvas4" width="700" height="355"></canvas></td>
     </tr>
 </table>
 
 <!-- <textarea id="text1" cols="100" rows="10"></textarea> -->
 
+Sixteen channels of RTD data:
+
 <table class="table-status">
     <tr>
-        <th>Top</th>
-        <th>Bottom</th>
-        <th>Front</th>
-        <th>Back</th>
-        <th>Left</th>
-        <th>Right</th>
-        <th>Spare1</th>
-        <th>Spare2</th>
+        <th>minute</th>
+        <th>01</th>
+        <th>02</th>
+        <th>03</th>
+        <th>04</th>
+        <th>05</th>
+        <th>06</th>
+        <th>07</th>
+        <th>08</th>
+        <th>11</th>
+        <th>12</th>
+        <th>13</th>
+        <th>14</th>
+        <th>15</th>
+        <th>16</th>
+        <th>17</th>
+        <th>18</th>
     </tr>
     <tr>
-        <td id="tTop"></td>
-        <td id="tBottom"></td>
-        <td id="tFront"></td>
-        <td id="tBack"></td>
-        <td id="tLeft"></td>
-        <td id="tRight"></td>
-        <td id="tSpare1"></td>
-        <td id="tSpare2"></td>
+        <td id="t00"></td>
+        <td id="t01"></td>
+        <td id="t02"></td>
+        <td id="t03"></td>
+        <td id="t04"></td>
+        <td id="t05"></td>
+        <td id="t06"></td>
+        <td id="t07"></td>
+        <td id="t08"></td>
+        <td id="t11"></td>
+        <td id="t12"></td>
+        <td id="t13"></td>
+        <td id="t14"></td>
+        <td id="t15"></td>
+        <td id="t16"></td>
+        <td id="t17"></td>
+        <td id="t18"></td>
     </tr>
 </table>
 
@@ -55,44 +79,30 @@
                 labels: [],
                 datasets: [
                 {
-                    label: "Top",
+                    label: "01",
                     backgroundColor: 'rgb(255, 0, 0)',
                     borderColor: 'rgb(255, 0, 0)',
                     data: [],
                     fill: false,
                 },
                 {
-                    label: "Bottom",
+                    label: "02",
                     backgroundColor: 'rgb(0, 255, 0)',
                     borderColor: 'rgb(0, 255, 0)',
                     data: [],
                     fill: false,
                 },
                 {
-                    label: "Front",
+                    label: "03",
                     backgroundColor: 'rgb(0, 0, 255)',
                     borderColor: 'rgb(0, 0, 255)',
                     data: [],
                     fill: false,
                 },
                 {
-                    label: "Back",
+                    label: "04",
                     backgroundColor: 'rgb(255, 255, 0)',
                     borderColor: 'rgb(255, 255, 0)',
-                    data: [],
-                    fill: false,
-                },
-                {
-                    label: "Left",
-                    backgroundColor: 'rgb(0, 255, 255)',
-                    borderColor: 'rgb(0, 255, 255)',
-                    data: [],
-                    fill: false,
-                },
-                {
-                    label: "Right",
-                    backgroundColor: 'rgb(128,128,128)',
-                    borderColor: 'rgb(128,128,128)',
                     data: [],
                     fill: false,
                 }
@@ -102,7 +112,7 @@
                 responsive: true,
                 title: {
                     display: true,
-                    text: 'Chamber Temperatures'
+                    text: 'Board 0 ch 1-4'
                 },
                 tooltips: {
                     mode: 'null',
@@ -140,16 +150,30 @@
                 labels: [],
                 datasets: [
                 {
-                    label: "Spare 1",
+                    label: "05",
                     backgroundColor: 'rgb(255, 0, 0)',
                     borderColor: 'rgb(255, 0, 0)',
                     data: [],
                     fill: false,
                 },
                 {
-                    label: "Spare 2",
+                    label: "06",
                     backgroundColor: 'rgb(0, 255, 0)',
                     borderColor: 'rgb(0, 255, 0)',
+                    data: [],
+                    fill: false,
+                },
+                {
+                    label: "07",
+                    backgroundColor: 'rgb(0, 0, 255)',
+                    borderColor: 'rgb(0, 0, 255)',
+                    data: [],
+                    fill: false,
+                },
+                {
+                    label: "08",
+                    backgroundColor: 'rgb(255, 255, 0)',
+                    borderColor: 'rgb(255, 255, 0)',
                     data: [],
                     fill: false,
                 }
@@ -159,7 +183,149 @@
                 responsive: true,
                 title: {
                     display: true,
-                    text: 'Probe Temperatures'
+                    text: 'Board 0 ch 5-8'
+                },
+                tooltips: {
+                    mode: 'null',
+                    intersect: false,
+                },
+                hover: {
+                    mode: 'null',
+                    intersect: true
+                },
+                scales: {
+                    xAxes: [{
+                        display: true,
+                        scaleLabel: {
+                            display: false,
+                            labelString: 'Time'
+                        },
+                        ticks:{
+                            autoSkip: true,
+                            maxTicksLimit: 10
+                        }
+                    }],
+                    yAxes: [{
+                        display: true,
+                        scaleLabel: {
+                            display: true,
+                            labelString: 'Value'
+                        }
+                    }]
+                }
+            }
+        };
+        const config3 = {
+            type: 'line',
+            data: {
+                labels: [],
+                datasets: [
+                {
+                    label: "11",
+                    backgroundColor: 'rgb(255, 0, 0)',
+                    borderColor: 'rgb(255, 0, 0)',
+                    data: [],
+                    fill: false,
+                },
+                {
+                    label: "12",
+                    backgroundColor: 'rgb(0, 255, 0)',
+                    borderColor: 'rgb(0, 255, 0)',
+                    data: [],
+                    fill: false,
+                },
+                {
+                    label: "13",
+                    backgroundColor: 'rgb(0, 0, 255)',
+                    borderColor: 'rgb(0, 0, 255)',
+                    data: [],
+                    fill: false,
+                },
+                {
+                    label: "14",
+                    backgroundColor: 'rgb(255, 255, 0)',
+                    borderColor: 'rgb(255, 255, 0)',
+                    data: [],
+                    fill: false,
+                }
+                ],
+            },
+            options: {
+                responsive: true,
+                title: {
+                    display: true,
+                    text: 'Board 1 ch 1-4'
+                },
+                tooltips: {
+                    mode: 'null',
+                    intersect: false,
+                },
+                hover: {
+                    mode: 'null',
+                    intersect: true
+                },
+                scales: {
+                    xAxes: [{
+                        display: true,
+                        scaleLabel: {
+                            display: false,
+                            labelString: 'Time'
+                        },
+                        ticks:{
+                            autoSkip: true,
+                            maxTicksLimit: 10
+                        }
+                    }],
+                    yAxes: [{
+                        display: true,
+                        scaleLabel: {
+                            display: true,
+                            labelString: 'Value'
+                        }
+                    }]
+                }
+            }
+        };
+        const config4 = {
+            type: 'line',
+            data: {
+                labels: [],
+                datasets: [
+                {
+                    label: "15",
+                    backgroundColor: 'rgb(255, 0, 0)',
+                    borderColor: 'rgb(255, 0, 0)',
+                    data: [],
+                    fill: false,
+                },
+                {
+                    label: "16",
+                    backgroundColor: 'rgb(0, 255, 0)',
+                    borderColor: 'rgb(0, 255, 0)',
+                    data: [],
+                    fill: false,
+                },
+                {
+                    label: "17",
+                    backgroundColor: 'rgb(0, 0, 255)',
+                    borderColor: 'rgb(0, 0, 255)',
+                    data: [],
+                    fill: false,
+                },
+                {
+                    label: "18",
+                    backgroundColor: 'rgb(255, 255, 0)',
+                    borderColor: 'rgb(255, 255, 0)',
+                    data: [],
+                    fill: false,
+                }
+                ],
+            },
+            options: {
+                responsive: true,
+                title: {
+                    display: true,
+                    text: 'Board 1 ch 5-8'
                 },
                 tooltips: {
                     mode: 'null',
@@ -194,9 +360,13 @@
 
         const context1 = document.getElementById('canvas1').getContext('2d');
         const context2 = document.getElementById('canvas2').getContext('2d');
+        const context3 = document.getElementById('canvas3').getContext('2d');
+        const context4 = document.getElementById('canvas4').getContext('2d');
 
         const lineChart1 = new Chart(context1, config1);
         const lineChart2 = new Chart(context2, config2);
+        const lineChart3 = new Chart(context3, config3);
+        const lineChart4 = new Chart(context4, config4);
 
         // Connect to the Flask-SocketIO server
         const socket = io.connect('http://' + document.domain + ':' + location.port);
@@ -212,41 +382,74 @@
             if (config1.data.labels.length === 10000) {
                 config1.data.labels.shift();
                 config2.data.labels.shift();
+                config3.data.labels.shift();
+                config4.data.labels.shift();
                 config1.data.datasets[0].data.shift();
                 config1.data.datasets[1].data.shift();
                 config1.data.datasets[2].data.shift();
                 config1.data.datasets[3].data.shift();
-                config1.data.datasets[4].data.shift();
-                config1.data.datasets[5].data.shift();
                 config2.data.datasets[0].data.shift();
                 config2.data.datasets[1].data.shift();
+                config2.data.datasets[2].data.shift();
+                config2.data.datasets[3].data.shift();
+                config3.data.datasets[0].data.shift();
+                config3.data.datasets[1].data.shift();
+                config3.data.datasets[2].data.shift();
+                config3.data.datasets[3].data.shift();
+                config4.data.datasets[0].data.shift();
+                config4.data.datasets[1].data.shift();
+                config4.data.datasets[2].data.shift();
+                config4.data.datasets[3].data.shift();
             }
-            config1.data.labels.push(data.time);
-            config1.data.datasets[0].data.push(data.top);
-            config1.data.datasets[1].data.push(data.bottom);
-            config1.data.datasets[2].data.push(data.front);
-            config1.data.datasets[3].data.push(data.back);
-            config1.data.datasets[4].data.push(data.left);
-            config1.data.datasets[5].data.push(data.right);
+            config1.data.labels.push(data[1]);
+            config1.data.datasets[0].data.push(data[2]);
+            config1.data.datasets[1].data.push(data[3]);
+            config1.data.datasets[2].data.push(data[4]);
+            config1.data.datasets[3].data.push(data[5]);
             lineChart1.update();
 
-            config2.data.labels.push(data.time);
-            config2.data.datasets[0].data.push(data.spare1);
-            config2.data.datasets[1].data.push(data.spare2);
+            config2.data.labels.push(data[1]);
+            config2.data.datasets[0].data.push(data[6]);
+            config2.data.datasets[1].data.push(data[7]);
+            config2.data.datasets[2].data.push(data[8]);
+            config2.data.datasets[3].data.push(data[9]);
             lineChart2.update();
+
+            config3.data.labels.push(data[1]);
+            config3.data.datasets[0].data.push(data[10]);
+            config3.data.datasets[1].data.push(data[11]);
+            config3.data.datasets[2].data.push(data[12]);
+            config3.data.datasets[3].data.push(data[13]);
+            lineChart3.update();
+
+            config4.data.labels.push(data[1]);
+            config4.data.datasets[0].data.push(data[14]);
+            config4.data.datasets[1].data.push(data[15]);
+            config4.data.datasets[2].data.push(data[16]);
+            config4.data.datasets[3].data.push(data[17]);
+            lineChart4.update();
 
             // document.getElementById('setpoint').value = data.setpoint.toFixed(1);
 
-            document.getElementById('tTop').innerHTML = data.top.toFixed(1);
-            document.getElementById('tBottom').innerHTML = data.bottom.toFixed(1);
-            document.getElementById('tFront').innerHTML = data.front.toFixed(1)
-            document.getElementById('tBack').innerHTML = data.back.toFixed(1);
-            document.getElementById('tLeft').innerHTML = data.left.toFixed(1);
-            document.getElementById('tRight').innerHTML = data.right.toFixed(1);
-            document.getElementById('tSpare1').innerHTML = data.spare1.toFixed(1);
-            document.getElementById('tSpare2').innerHTML = data.spare2.toFixed(1);
+            document.getElementById('t00').innerHTML = data[1].toFixed(2);
 
+            document.getElementById('t01').innerHTML = data[2].toFixed(1);
+            document.getElementById('t02').innerHTML = data[3].toFixed(1);
+            document.getElementById('t03').innerHTML = data[4].toFixed(1);
+            document.getElementById('t04').innerHTML = data[5].toFixed(1);
+            document.getElementById('t05').innerHTML = data[6].toFixed(1);
+            document.getElementById('t06').innerHTML = data[7].toFixed(1);
+            document.getElementById('t07').innerHTML = data[8].toFixed(1);
+            document.getElementById('t08').innerHTML = data[9].toFixed(1);
 
+            document.getElementById('t11').innerHTML = data[10].toFixed(1);
+            document.getElementById('t12').innerHTML = data[11].toFixed(1);
+            document.getElementById('t13').innerHTML = data[12].toFixed(1);
+            document.getElementById('t14').innerHTML = data[13].toFixed(1);
+            document.getElementById('t15').innerHTML = data[14].toFixed(1);
+            document.getElementById('t16').innerHTML = data[15].toFixed(1);
+            document.getElementById('t17').innerHTML = data[16].toFixed(1);
+            document.getElementById('t18').innerHTML = data[17].toFixed(1);
         });
 
     });

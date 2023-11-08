@@ -17,19 +17,22 @@ def open(database_file):
             id INTEGER PRIMARY KEY AUTOINCREMENT, 
             run_number INTEGER,
             time REAL,
-            top REAL,
-            bottom REAL,
-            front REAL,
-            back REAL,
-            probe1 REAL,
-            probe2 REAL,
-            pi REAL,
-            ssr REAL,
-            avg REAL,
-            setpoint REAL,
-            command REAL,
-            integral REAL,
-            on_time REAL,
+            ch01 REAL,
+            ch02 REAL,
+            ch03 REAL,
+            ch04 REAL,
+            ch05 REAL,
+            ch06 REAL,
+            ch07 REAL,
+            ch08 REAL,
+            ch11 REAL,
+            ch12 REAL,
+            ch13 REAL,
+            ch14 REAL,
+            ch15 REAL,
+            ch16 REAL,
+            ch17 REAL,
+            ch18 REAL,
             FOREIGN KEY (run_number) REFERENCES run_summary(run_number)
         )'''
 
@@ -113,8 +116,8 @@ def insert_run_data(db,data):
     cursor = db.cursor()
 
     q_insert_run_data='''
-        INSERT INTO run_data (run_number, time, top, bottom, front, back, probe1, probe2, pi, ssr, avg, setpoint, command, integral, on_time)
-        VALUES (?,?,?,?,?, ?,?,?,?,?, ?,?,?,?,?)
+        INSERT INTO run_data (run_number,time,    ch01,ch02,ch03,ch04, ch05,ch06,ch07,ch08, ch11,ch12,ch13,ch14, ch15,ch16,ch17,ch18)
+        VALUES (?,?,   ?,?,?,?, ?,?,?,?,   ?,?,?,?, ?,?,?,?)
     '''
 
     cursor.execute(q_insert_run_data,data)
