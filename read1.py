@@ -20,12 +20,15 @@ import numpy as np
 import sql
 
 # globals to hold current readings and command
-row1 = [1,0, 0,0,0,0, 0,0,0,0, 0,0,0,0, 0,0,0,0]      # a single row of data
-data1 = []      # append row onto a larger table
-caldata = []
+resist = [0.0]*16           # a single row of raw resistances
+temperature = [0.0]*16      # a single row of calibrated temperatures
+row1 = [1,0]+temperature
 
-on_time = 0
-timecount = 0
+cal_data = []
+cal_m = [1.0]*16
+cal_b = [0.0]*16
+cal_coeffs = []
+
 time0 = time.time()
 timei = 0.0
 
@@ -65,6 +68,8 @@ def controller():
     # call out globals that are modified within this function
     global timei
     global nan_count
+    global resist
+    global temperature
     global row1
 
     # local vars
@@ -74,25 +79,27 @@ def controller():
     temp = 0
 
     while True:
-        row1[0] = 1
         timei = round((1/60)*(time.time()-time0),2)
-        row1[1] = timei
         count = count + 1      
 
         # loop over boards (0 and 1) and channels (1 to 8)
         for board in range(2):
             for channel in range(1,9):
-                if( (2+8*board+channel-1) !=13):
-                    temp = librtd.get(board,channel)
+                if( (8*board+channel-1) !=11):
+                    temp = librtd.getRes(board,channel)
                 else:
                     # broken channel, read one prior instead
-                    temp = librtd.get(board,channel-1)
+                    temp = librtd.getRes(board,channel-1)
                     
                 # if sensor returns NaN don't update the row value
                 if(np.isnan(temp)==False):
-                    row1[2+8*board+channel-1]=temp
+                    resist[8*board+channel-1] = temp
+                    temperature[8*board+channel-1] = cal_m[8*board+channel-1]*temp + cal_b[8*board+channel-1]
                 else:
                     nan_count = nan_count+1
+
+                # make a row of data
+                row1 = [1, timei]+temperature
 
         frow1 = [f'{item:.2f}' for item in row1]
         print(', '.join(frow1))
@@ -106,30 +113,105 @@ t1.start()
 t2 = threading.Thread(target=emit_data,daemon=True)
 t2.start()
 
-@socketio.on('update_calpoint')			
-def update_cal(data):
-    global caldata
-    global calm
-    global calb
+def cal_print():
+    global cal_data
+    global cal_m
+    global cal_b
+    global cal_coeffs
     global row1
-    
+
+    print('----- cal_data ------')
+    print(cal_data)
+    print('----- cal_m ------')
+    print(cal_m)
+    print('----- cal_b ------')
+    print(cal_b)
+    print('----- cal_coeffs ------')
+    print(cal_coeffs)
+
+@socketio.on('cal_add')			
+def cal_add(data):
+    global cal_data
+    global cal_m
+    global cal_b
+    global cal_coeffs
+    global row1
+
+    print('cal_add')
     temp = [data]+row1[2:]
-    caldata.append(temp)
-    print(temp)
-    print(caldata)
-    calm=[]
-    calb=[]
-    ydata = [col[0] for col in caldata]
+    cal_data.append(temp)
+    cal_m=[]
+    cal_b=[]
+    ydata = [col[0] for col in cal_data]
     print(ydata)
     for i in range(16):
-        xdata = [col[i+1] for col in caldata]
+        xdata = [col[i+1] for col in cal_data]
         print(xdata)
         m,b = np.polyfit(xdata,ydata,1)
-        calm.append(m)
-        calb.append(b)
+        cal_m.append(m)
+        cal_b.append(b)
     
-    print(calm)
-    print(calb)
+    cal_coeffs = list(zip(cal_m,cal_b))
+    cal_print()
+
+@socketio.on('cal_load')			
+def cal_load():
+    global cal_data
+    global cal_m
+    global cal_b
+    global cal_coeffs
+    global row1
+
+    cal_coeffs = []
+
+    # Read the calibration data from the text file
+    with open('calibration.txt', 'r') as file:
+        for line in file:
+            if line.startswith('Sensor'):
+                # Extract m and b values from the line and append to the list
+                parts = line.split()
+                m = float(parts[4].strip(','))  # Extract and convert m
+                b = float(parts[7])            # Extract and convert b
+                cal_coeffs.append((m, b))
+
+    # Split the combined_list into list1 and list2
+    cal_m, cal_b = zip(*cal_coeffs)
+
+    # Convert the results to lists
+    cal_m = list(cal_m)
+    cal_b = list(cal_b)
+    cal_print()
+
+@socketio.on('cal_save')			
+def cal_save():
+    global cal_data
+    global cal_m
+    global cal_b
+    global cal_coeffs
+    global row1
+
+    print('cal_save')
+    # Write the calibration data to a text file
+    with open('calibration.txt', 'w') as file:
+        for sensor, (m, b) in enumerate(cal_coeffs, start=1):
+            file.write(f'Sensor {sensor}: m = {m:.8f}, b = {b:.8f}\n')
+
+    cal_print()
+
+@socketio.on('cal_reset')			
+def cal_reset():
+    global cal_data
+    global cal_m
+    global cal_b
+    global cal_coeffs
+    global row1
+
+    print('cal_reset')
+    cal_data=[]
+    cal_m=[1.0]*16
+    cal_b=[0.0]*16
+    cal_coeffs = list(zip(cal_m,cal_b))
+    cal_print()
 
 # flask webpage main
 @app.route("/")

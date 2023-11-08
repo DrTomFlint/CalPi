@@ -67,9 +67,15 @@ Sixteen channels of RTD data:
 <table class="table-status">
     <tr>
         <th>Cal</th>
+        <th>Load</th>
+        <th>Save</th>
+        <th>Reset</th>
     </tr>
     <tr>
-        <td><input id="calpoint" type="number" value=0></td>
+        <td><input id="cal_add" type="number" value=0></td>
+        <td><button id="cal_load">Load</button></td>
+        <td><button id="cal_save">Save</button></td>
+        <td><button id="cal_reset">Reset</button></td>
     </tr>
 </table>
 
@@ -380,13 +386,30 @@ Sixteen channels of RTD data:
         // Connect to the Flask-SocketIO server
         const socket = io.connect('http://' + document.domain + ':' + location.port);
 
-        // Emit a change in setpoint, limit the range
-        const calpoint = document.getElementById('calpoint');
+        // Calibration add data point
+        const calpoint = document.getElementById('cal_add');
         calpoint.onchange = function(){
             var val = Number(calpoint.value);
-            socket.emit('update_calpoint',val);
+            socket.emit('cal_add',val);
         }
 
+        // Calibration load
+        const calload = document.getElementById('cal_load');
+        calload.onclick = function(){
+            socket.emit('cal_load');
+        }
+
+        // Calibration save
+        const calsave = document.getElementById('cal_save');
+        calsave.onclick = function(){
+            socket.emit('cal_save');
+        }
+
+        // Calibration reset
+        const calreset = document.getElementById('cal_reset');
+        calreset.onclick = function(){
+            socket.emit('cal_reset');
+        }
 
         // Listen for the 'update_chart' event from the server
         socket.on('update_chart', function (message) {
