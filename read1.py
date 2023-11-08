@@ -22,6 +22,7 @@ import sql
 # globals to hold current readings and command
 row1 = [1,0, 0,0,0,0, 0,0,0,0, 0,0,0,0, 0,0,0,0]      # a single row of data
 data1 = []      # append row onto a larger table
+caldata = []
 
 on_time = 0
 timecount = 0
@@ -105,6 +106,31 @@ t1.start()
 t2 = threading.Thread(target=emit_data,daemon=True)
 t2.start()
 
+@socketio.on('update_calpoint')			
+def update_cal(data):
+    global caldata
+    global calm
+    global calb
+    global row1
+    
+    temp = [data]+row1[2:]
+    caldata.append(temp)
+    print(temp)
+    print(caldata)
+    calm=[]
+    calb=[]
+    ydata = [col[0] for col in caldata]
+    print(ydata)
+    for i in range(16):
+        xdata = [col[i+1] for col in caldata]
+        print(xdata)
+        m,b = np.polyfit(xdata,ydata,1)
+        calm.append(m)
+        calb.append(b)
+    
+    print(calm)
+    print(calb)
+
 # flask webpage main
 @app.route("/")
 def index():
@@ -114,7 +140,6 @@ def index():
     initial_values = {
     }
     return render_template('read1.html',initial_values=initial_values)
-
 
 if __name__=="__main__":
 #	app.run(host='0.0.0.0',debug=False)

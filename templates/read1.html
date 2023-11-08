@@ -64,6 +64,15 @@ Sixteen channels of RTD data:
     </tr>
 </table>
 
+<table class="table-status">
+    <tr>
+        <th>Cal</th>
+    </tr>
+    <tr>
+        <td><input id="calpoint" type="number" value=0></td>
+    </tr>
+</table>
+
 <!--suppress JSUnresolvedLibraryURL -->
 <script src="static/jquery.min.js"></script>
 <!--suppress JSUnresolvedLibraryURL -->
@@ -370,6 +379,14 @@ Sixteen channels of RTD data:
 
         // Connect to the Flask-SocketIO server
         const socket = io.connect('http://' + document.domain + ':' + location.port);
+
+        // Emit a change in setpoint, limit the range
+        const calpoint = document.getElementById('calpoint');
+        calpoint.onchange = function(){
+            var val = Number(calpoint.value);
+            socket.emit('update_calpoint',val);
+        }
+
 
         // Listen for the 'update_chart' event from the server
         socket.on('update_chart', function (message) {
