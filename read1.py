@@ -25,6 +25,7 @@ temperature = [0.0]*16      # a single row of calibrated temperatures
 row1 = [1,0]+temperature
 
 cal_data = []
+cal_num = 0
 cal_m = [1.0]*16
 cal_b = [0.0]*16
 cal_coeffs = []
@@ -86,10 +87,10 @@ def controller():
         for board in range(2):
             for channel in range(1,9):
                 if( (8*board+channel-1) !=11):
-                    temp = librtd.getRes(board,channel)
+                    temp = librtd.get(board,channel)
                 else:
                     # broken channel, read one prior instead
-                    temp = librtd.getRes(board,channel-1)
+                    temp = librtd.get(board,channel-1)
                     
                 # if sensor returns NaN don't update the row value
                 if(np.isnan(temp)==False):
@@ -135,21 +136,24 @@ def cal_add(data):
     global cal_m
     global cal_b
     global cal_coeffs
+    global cal_num
     global row1
 
     print('cal_add')
-    temp = [data]+row1[2:]
+    cal_num += 1
+    temp = [data]+resist
     cal_data.append(temp)
-    cal_m=[]
-    cal_b=[]
-    ydata = [col[0] for col in cal_data]
-    print(ydata)
-    for i in range(16):
-        xdata = [col[i+1] for col in cal_data]
-        print(xdata)
-        m,b = np.polyfit(xdata,ydata,1)
-        cal_m.append(m)
-        cal_b.append(b)
+    if cal_num>=2:
+        cal_m=[]
+        cal_b=[]
+        ydata = [col[0] for col in cal_data]
+        print(ydata)
+        for i in range(16):
+            xdata = [col[i+1] for col in cal_data]
+            print(xdata)
+            m,b = np.polyfit(xdata,ydata,1)
+            cal_m.append(m)
+            cal_b.append(b)
     
     cal_coeffs = list(zip(cal_m,cal_b))
     cal_print()
