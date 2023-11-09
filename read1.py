@@ -20,15 +20,14 @@ import numpy as np
 import sql
 
 # globals to hold current readings and command
-resist = [0.0]*16           # a single row of raw resistances
 temperature = [0.0]*16      # a single row of calibrated temperatures
 row1 = [1,0]+temperature
 
-cal_data = []
-cal_num = 0
 cal_m = [1.0]*16
 cal_b = [0.0]*16
 cal_coeffs = []
+
+run_number = 1
 
 time0 = time.time()
 timei = 0.0
@@ -69,9 +68,9 @@ def controller():
     # call out globals that are modified within this function
     global timei
     global nan_count
-    global resist
     global temperature
     global row1
+    global cal_b
 
     # local vars
     count = 0  
@@ -86,21 +85,15 @@ def controller():
         # loop over boards (0 and 1) and channels (1 to 8)
         for board in range(2):
             for channel in range(1,9):
-                if( (8*board+channel-1) !=11):
-                    temp = librtd.get(board,channel)
-                else:
-                    # broken channel, read one prior instead
-                    temp = librtd.get(board,channel-1)
-                    
+                temp = librtd.get(board,channel)                    
                 # if sensor returns NaN don't update the row value
                 if(np.isnan(temp)==False):
-                    resist[8*board+channel-1] = temp
-                    temperature[8*board+channel-1] = cal_m[8*board+channel-1]*temp + cal_b[8*board+channel-1]
+                    temperature[8*board+channel-1] = temp + cal_b[8*board+channel-1]
                 else:
                     nan_count = nan_count+1
 
                 # make a row of data
-                row1 = [1, timei]+temperature
+                row1 = [run_number, timei]+temperature
 
         frow1 = [f'{item:.2f}' for item in row1]
         print(', '.join(frow1))
@@ -121,8 +114,6 @@ def cal_print():
     global cal_coeffs
     global row1
 
-    print('----- cal_data ------')
-    print(cal_data)
     print('----- cal_m ------')
     print(cal_m)
     print('----- cal_b ------')
@@ -132,39 +123,24 @@ def cal_print():
 
 @socketio.on('cal_add')			
 def cal_add(data):
-    global cal_data
     global cal_m
     global cal_b
     global cal_coeffs
-    global cal_num
     global row1
+    global temperature
 
     print('cal_add')
-    cal_num += 1
-    temp = [data]+resist
-    cal_data.append(temp)
-    if cal_num>=2:
-        cal_m=[]
-        cal_b=[]
-        ydata = [col[0] for col in cal_data]
-        print(ydata)
-        for i in range(16):
-            xdata = [col[i+1] for col in cal_data]
-            print(xdata)
-            m,b = np.polyfit(xdata,ydata,1)
-            cal_m.append(m)
-            cal_b.append(b)
+    for i in range(16):
+        cal_b[i] = data - temperature[i] 
     
     cal_coeffs = list(zip(cal_m,cal_b))
     cal_print()
 
 @socketio.on('cal_load')			
 def cal_load():
-    global cal_data
     global cal_m
     global cal_b
     global cal_coeffs
-    global row1
 
     cal_coeffs = []
 
@@ -188,11 +164,9 @@ def cal_load():
 
 @socketio.on('cal_save')			
 def cal_save():
-    global cal_data
     global cal_m
     global cal_b
     global cal_coeffs
-    global row1
 
     print('cal_save')
     # Write the calibration data to a text file
@@ -204,14 +178,11 @@ def cal_save():
 
 @socketio.on('cal_reset')			
 def cal_reset():
-    global cal_data
     global cal_m
     global cal_b
     global cal_coeffs
-    global row1
 
     print('cal_reset')
-    cal_data=[]
     cal_m=[1.0]*16
     cal_b=[0.0]*16
     cal_coeffs = list(zip(cal_m,cal_b))
