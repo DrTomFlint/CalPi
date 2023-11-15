@@ -23,6 +23,10 @@ import sql
 temperature = [0.0]*16      # a single row of calibrated temperatures
 row1 = [1,0]+temperature
 
+cal_y0 = [0.0]*16
+cal_y1 = [0.0]*16
+cal0 = 0.0
+cal1 = 0.0
 cal_m = [1.0]*16
 cal_b = [0.0]*16
 cal_coeffs = []
@@ -70,6 +74,7 @@ def controller():
     global nan_count
     global temperature
     global row1
+    global cal_m
     global cal_b
 
     # local vars
@@ -88,7 +93,7 @@ def controller():
                 temp = librtd.get(board,channel)                    
                 # if sensor returns NaN don't update the row value
                 if(np.isnan(temp)==False):
-                    temperature[8*board+channel-1] = temp + cal_b[8*board+channel-1]
+                    temperature[8*board+channel-1] = (temp - cal_b[8*board+channel-1]) / cal_m[8*board+channel-1]
                 else:
                     nan_count = nan_count+1
 
@@ -108,12 +113,20 @@ t2 = threading.Thread(target=emit_data,daemon=True)
 t2.start()
 
 def cal_print():
-    global cal_data
+    global cal_y0
+    global cal_y1
     global cal_m
     global cal_b
     global cal_coeffs
-    global row1
 
+    print('----- cal0 ------')
+    print(cal0)
+    print('----- cal1 ------')
+    print(cal1)
+    print('----- cal_y0 ------')
+    print(cal_y0)
+    print('----- cal_y1 ------')
+    print(cal_y1)
     print('----- cal_m ------')
     print(cal_m)
     print('----- cal_b ------')
@@ -121,18 +134,35 @@ def cal_print():
     print('----- cal_coeffs ------')
     print(cal_coeffs)
 
-@socketio.on('cal_add')			
-def cal_add(data):
-    global cal_m
-    global cal_b
-    global cal_coeffs
-    global row1
+@socketio.on('cal_zero')			
+def cal_zero():
+    global cal_y0
+    global cal0
     global temperature
 
-    print('cal_add')
+    print('cal_zero')
+    cal_y0 = temperature.copy()
+    cal0 = np.mean(cal_y0)
+    cal_print()
+
+@socketio.on('cal_one')			
+def cal_one():
+    global cal_y0
+    global cal_y1
+    global cal_coeffs
+    global cal0
+    global cal1
+    global temperature
+
+    print('cal_one')
+    cal_y1 = temperature.copy()
+
+    cal1 = np.mean(cal_y1)
+    print(f'Calibration point means {cal0:.4f}, {cal1:.4f}')
+
     for i in range(16):
-        cal_b[i] = data - temperature[i] 
-    
+        cal_m[i] = (cal_y1[i]-cal_y0[i]) / (cal1-cal0)
+        cal_b[i] = cal_y0[i] - cal_m[i] * cal0
     cal_coeffs = list(zip(cal_m,cal_b))
     cal_print()
 
@@ -166,11 +196,16 @@ def cal_load():
 def cal_save():
     global cal_m
     global cal_b
+    global cal0
+    global cal1
     global cal_coeffs
 
     print('cal_save')
     # Write the calibration data to a text file
+    cal_coeffs = list(zip(cal_m,cal_b))
     with open('calibration.txt', 'w') as file:
+        file.write(f'Calibration done {datetime.now().strftime("%Y-%m-%d %H:%M:%S")}\n')
+        file.write(f'with cal0 = {cal0:.4f} and cal1 = {cal1:.4f}\n')
         for sensor, (m, b) in enumerate(cal_coeffs, start=1):
             file.write(f'Sensor {sensor}: m = {m:.8f}, b = {b:.8f}\n')
 
@@ -180,11 +215,15 @@ def cal_save():
 def cal_reset():
     global cal_m
     global cal_b
+    global cal0
+    global cal1
     global cal_coeffs
 
     print('cal_reset')
     cal_m=[1.0]*16
     cal_b=[0.0]*16
+    cal0 = 0.0
+    cal1 = 0.0
     cal_coeffs = list(zip(cal_m,cal_b))
     cal_print()
 
@@ -196,7 +235,7 @@ def index():
     global emit_refresh
     initial_values = {
     }
-    return render_template('read1.html',initial_values=initial_values)
+    return render_template('read2.html',initial_values=initial_values)
 
 if __name__=="__main__":
 #	app.run(host='0.0.0.0',debug=False)

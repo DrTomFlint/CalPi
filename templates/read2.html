@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Read1</title>
+    <title>Read2</title>
     <link rel="stylesheet" href="./static/ovenstyle.css">
 </head>
 <body>
@@ -10,12 +10,7 @@
 <!-- 560 x 355 width for 3 columns on screen -->
 <table>
     <tr>
-        <td><canvas id="canvas1" width="700" height="355"></canvas></td>
-        <td><canvas id="canvas2" width="700" height="355"></canvas></td>
-    </tr>
-    <tr>
-        <td><canvas id="canvas3" width="700" height="355"></canvas></td>
-        <td><canvas id="canvas4" width="700" height="355"></canvas></td>
+        <td><canvas id="canvas1" width="1500" height="700"></canvas></td>
     </tr>
 </table>
 
@@ -66,13 +61,8 @@ Sixteen channels of RTD data:
 
 <table class="table-status">
     <tr>
-        <th>Cal</th>
-        <th>Load</th>
-        <th>Save</th>
-        <th>Reset</th>
-    </tr>
-    <tr>
-        <td><input id="cal_add" type="number" value=0></td>
+        <td><button id="cal_zero">Cal 0</button></td>
+        <td><button id="cal_one">Cal 1</button></td>
         <td><button id="cal_load">Load</button></td>
         <td><button id="cal_save">Save</button></td>
         <td><button id="cal_reset">Reset</button></td>
@@ -102,235 +92,105 @@ Sixteen channels of RTD data:
                 },
                 {
                     label: "02",
-                    backgroundColor: 'rgb(0, 255, 0)',
-                    borderColor: 'rgb(0, 255, 0)',
+                    backgroundColor: 'rgb(255, 40, 40)',
+                    borderColor: 'rgb(255, 40, 40)',
                     data: [],
                     fill: false,
                 },
                 {
                     label: "03",
-                    backgroundColor: 'rgb(0, 0, 255)',
-                    borderColor: 'rgb(0, 0, 255)',
+                    backgroundColor: 'rgb(255, 80, 80)',
+                    borderColor: 'rgb(255, 80, 80)',
                     data: [],
                     fill: false,
                 },
                 {
                     label: "04",
-                    backgroundColor: 'rgb(255, 255, 0)',
-                    borderColor: 'rgb(255, 255, 0)',
+                    backgroundColor: 'rgb(255, 120, 120)',
+                    borderColor: 'rgb(255, 120, 120)',
                     data: [],
                     fill: false,
-                }
-                ],
-            },
-            options: {
-                responsive: true,
-                title: {
-                    display: true,
-                    text: 'Board 0 ch 1-4'
                 },
-                tooltips: {
-                    mode: 'null',
-                    intersect: false,
-                },
-                hover: {
-                    mode: 'null',
-                    intersect: true
-                },
-                scales: {
-                    xAxes: [{
-                        display: true,
-                        scaleLabel: {
-                            display: false,
-                            labelString: 'Time'
-                        },
-                        ticks:{
-                            autoSkip: true,
-                            maxTicksLimit: 10
-                        }
-                    }],
-                    yAxes: [{
-                        display: true,
-                        scaleLabel: {
-                            display: true,
-                            labelString: 'Value'
-                        }
-                    }]
-                }
-            }
-        };
-        const config2 = {
-            type: 'line',
-            data: {
-                labels: [],
-                datasets: [
                 {
                     label: "05",
-                    backgroundColor: 'rgb(255, 0, 0)',
-                    borderColor: 'rgb(255, 0, 0)',
+                    backgroundColor: 'rgb(0, 255, 0)',
+                    borderColor: 'rgb(0, 255, 0)',
                     data: [],
                     fill: false,
                 },
                 {
                     label: "06",
-                    backgroundColor: 'rgb(0, 255, 0)',
-                    borderColor: 'rgb(0, 255, 0)',
+                    backgroundColor: 'rgb(40, 255, 40)',
+                    borderColor: 'rgb(40, 255, 40)',
                     data: [],
                     fill: false,
                 },
                 {
                     label: "07",
-                    backgroundColor: 'rgb(0, 0, 255)',
-                    borderColor: 'rgb(0, 0, 255)',
+                    backgroundColor: 'rgb(80, 255, 80)',
+                    borderColor: 'rgb(80, 255, 80)',
                     data: [],
                     fill: false,
                 },
                 {
                     label: "08",
-                    backgroundColor: 'rgb(255, 255, 0)',
-                    borderColor: 'rgb(255, 255, 0)',
+                    backgroundColor: 'rgb(120, 255, 120)',
+                    borderColor: 'rgb(120, 255, 120)',
                     data: [],
                     fill: false,
-                }
-                ],
-            },
-            options: {
-                responsive: true,
-                title: {
-                    display: true,
-                    text: 'Board 0 ch 5-8'
                 },
-                tooltips: {
-                    mode: 'null',
-                    intersect: false,
-                },
-                hover: {
-                    mode: 'null',
-                    intersect: true
-                },
-                scales: {
-                    xAxes: [{
-                        display: true,
-                        scaleLabel: {
-                            display: false,
-                            labelString: 'Time'
-                        },
-                        ticks:{
-                            autoSkip: true,
-                            maxTicksLimit: 10
-                        }
-                    }],
-                    yAxes: [{
-                        display: true,
-                        scaleLabel: {
-                            display: true,
-                            labelString: 'Value'
-                        }
-                    }]
-                }
-            }
-        };
-        const config3 = {
-            type: 'line',
-            data: {
-                labels: [],
-                datasets: [
                 {
                     label: "11",
-                    backgroundColor: 'rgb(255, 0, 0)',
-                    borderColor: 'rgb(255, 0, 0)',
+                    backgroundColor: 'rgb(0, 0, 255)',
+                    borderColor: 'rgb(0, 0, 255)',
                     data: [],
                     fill: false,
                 },
                 {
                     label: "12",
-                    backgroundColor: 'rgb(0, 255, 0)',
-                    borderColor: 'rgb(0, 255, 0)',
-                    data: [],
+                    backgroundColor: 'rgb(40, 40, 255)',
+                    borderColor: 'rgb(40, 40, 255)',
                     fill: false,
                 },
                 {
                     label: "13",
-                    backgroundColor: 'rgb(0, 0, 255)',
-                    borderColor: 'rgb(0, 0, 255)',
+                    backgroundColor: 'rgb(80, 80, 255)',
+                    borderColor: 'rgb(80, 80, 255)',
                     data: [],
                     fill: false,
                 },
                 {
                     label: "14",
-                    backgroundColor: 'rgb(255, 255, 0)',
-                    borderColor: 'rgb(255, 255, 0)',
+                    backgroundColor: 'rgb(120, 120, 255)',
+                    borderColor: 'rgb(120, 120, 255)',
                     data: [],
                     fill: false,
-                }
-                ],
-            },
-            options: {
-                responsive: true,
-                title: {
-                    display: true,
-                    text: 'Board 1 ch 1-4'
                 },
-                tooltips: {
-                    mode: 'null',
-                    intersect: false,
-                },
-                hover: {
-                    mode: 'null',
-                    intersect: true
-                },
-                scales: {
-                    xAxes: [{
-                        display: true,
-                        scaleLabel: {
-                            display: false,
-                            labelString: 'Time'
-                        },
-                        ticks:{
-                            autoSkip: true,
-                            maxTicksLimit: 10
-                        }
-                    }],
-                    yAxes: [{
-                        display: true,
-                        scaleLabel: {
-                            display: true,
-                            labelString: 'Value'
-                        }
-                    }]
-                }
-            }
-        };
-        const config4 = {
-            type: 'line',
-            data: {
-                labels: [],
-                datasets: [
                 {
                     label: "15",
-                    backgroundColor: 'rgb(255, 0, 0)',
-                    borderColor: 'rgb(255, 0, 0)',
+                    backgroundColor: 'rgb(255, 0, 255)',
+                    borderColor: 'rgb(255, 255, 0)',
                     data: [],
                     fill: false,
                 },
                 {
                     label: "16",
-                    backgroundColor: 'rgb(0, 255, 0)',
-                    borderColor: 'rgb(0, 255, 0)',
+                    backgroundColor: 'rgb(255, 40, 255)',
+                    borderColor: 'rgb(255, 40, 255)',
                     data: [],
                     fill: false,
                 },
                 {
                     label: "17",
-                    backgroundColor: 'rgb(0, 0, 255)',
-                    borderColor: 'rgb(0, 0, 255)',
+                    backgroundColor: 'rgb(255, 80, 255)',
+                    borderColor: 'rgb(255, 80, 255)',
                     data: [],
                     fill: false,
                 },
                 {
                     label: "18",
-                    backgroundColor: 'rgb(255, 255, 0)',
-                    borderColor: 'rgb(255, 255, 0)',
+                    backgroundColor: 'rgb(255, 120, 255)',
+                    borderColor: 'rgb(255, 120, 255)',
                     data: [],
                     fill: false,
                 }
@@ -340,7 +200,7 @@ Sixteen channels of RTD data:
                 responsive: true,
                 title: {
                     display: true,
-                    text: 'Board 1 ch 5-8'
+                    text: 'RTD Hat 0 and 1'
                 },
                 tooltips: {
                     mode: 'null',
@@ -374,23 +234,22 @@ Sixteen channels of RTD data:
         };
 
         const context1 = document.getElementById('canvas1').getContext('2d');
-        const context2 = document.getElementById('canvas2').getContext('2d');
-        const context3 = document.getElementById('canvas3').getContext('2d');
-        const context4 = document.getElementById('canvas4').getContext('2d');
 
         const lineChart1 = new Chart(context1, config1);
-        const lineChart2 = new Chart(context2, config2);
-        const lineChart3 = new Chart(context3, config3);
-        const lineChart4 = new Chart(context4, config4);
 
         // Connect to the Flask-SocketIO server
         const socket = io.connect('http://' + document.domain + ':' + location.port);
 
-        // Calibration add data point
-        const calpoint = document.getElementById('cal_add');
-        calpoint.onchange = function(){
-            var val = Number(calpoint.value);
-            socket.emit('cal_add',val);
+        // Cal zero
+        const calzero = document.getElementById('cal_zero');
+        calzero.onclick = function(){
+            socket.emit('cal_zero');
+        }
+
+        // Cal one
+        const calone = document.getElementById('cal_one');
+        calone.onclick = function(){
+            socket.emit('cal_one');
         }
 
         // Calibration load
@@ -428,46 +287,37 @@ Sixteen channels of RTD data:
                 config1.data.datasets[1].data.shift();
                 config1.data.datasets[2].data.shift();
                 config1.data.datasets[3].data.shift();
-                config2.data.datasets[0].data.shift();
-                config2.data.datasets[1].data.shift();
-                config2.data.datasets[2].data.shift();
-                config2.data.datasets[3].data.shift();
-                config3.data.datasets[0].data.shift();
-                config3.data.datasets[1].data.shift();
-                config3.data.datasets[2].data.shift();
-                config3.data.datasets[3].data.shift();
-                config4.data.datasets[0].data.shift();
-                config4.data.datasets[1].data.shift();
-                config4.data.datasets[2].data.shift();
-                config4.data.datasets[3].data.shift();
+                config1.data.datasets[4].data.shift();
+                config1.data.datasets[5].data.shift();
+                config1.data.datasets[6].data.shift();
+                config1.data.datasets[7].data.shift();
+                config1.data.datasets[8].data.shift();
+                config1.data.datasets[9].data.shift();
+                config1.data.datasets[10].data.shift();
+                config1.data.datasets[11].data.shift();
+                config1.data.datasets[12].data.shift();
+                config1.data.datasets[13].data.shift();
+                config1.data.datasets[14].data.shift();
+                config1.data.datasets[15].data.shift();
             }
             config1.data.labels.push(data[1]);
             config1.data.datasets[0].data.push(data[2]);
             config1.data.datasets[1].data.push(data[3]);
             config1.data.datasets[2].data.push(data[4]);
             config1.data.datasets[3].data.push(data[5]);
+            config1.data.datasets[4].data.push(data[6]);
+            config1.data.datasets[5].data.push(data[7]);
+            config1.data.datasets[6].data.push(data[8]);
+            config1.data.datasets[7].data.push(data[9]);
+            config1.data.datasets[8].data.push(data[10]);
+            config1.data.datasets[9].data.push(data[11]);
+            config1.data.datasets[10].data.push(data[12]);
+            config1.data.datasets[11].data.push(data[13]);
+            config1.data.datasets[12].data.push(data[14]);
+            config1.data.datasets[13].data.push(data[15]);
+            config1.data.datasets[14].data.push(data[16]);
+            config1.data.datasets[15].data.push(data[17]);
             lineChart1.update();
-
-            config2.data.labels.push(data[1]);
-            config2.data.datasets[0].data.push(data[6]);
-            config2.data.datasets[1].data.push(data[7]);
-            config2.data.datasets[2].data.push(data[8]);
-            config2.data.datasets[3].data.push(data[9]);
-            lineChart2.update();
-
-            config3.data.labels.push(data[1]);
-            config3.data.datasets[0].data.push(data[10]);
-            config3.data.datasets[1].data.push(data[11]);
-            config3.data.datasets[2].data.push(data[12]);
-            config3.data.datasets[3].data.push(data[13]);
-            lineChart3.update();
-
-            config4.data.labels.push(data[1]);
-            config4.data.datasets[0].data.push(data[14]);
-            config4.data.datasets[1].data.push(data[15]);
-            config4.data.datasets[2].data.push(data[16]);
-            config4.data.datasets[3].data.push(data[17]);
-            lineChart4.update();
 
             // document.getElementById('setpoint').value = data.setpoint.toFixed(1);
 
