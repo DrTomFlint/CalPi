@@ -25,14 +25,14 @@ def open(database_file):
             ch06 REAL,
             ch07 REAL,
             ch08 REAL,
+            ch09 REAL,
+            ch10 REAL,
             ch11 REAL,
             ch12 REAL,
             ch13 REAL,
             ch14 REAL,
             ch15 REAL,
             ch16 REAL,
-            ch17 REAL,
-            ch18 REAL,
             FOREIGN KEY (run_number) REFERENCES run_summary(run_number)
         )'''
 
@@ -116,7 +116,7 @@ def insert_run_data(db,data):
     cursor = db.cursor()
 
     q_insert_run_data='''
-        INSERT INTO run_data (run_number,time,    ch01,ch02,ch03,ch04, ch05,ch06,ch07,ch08, ch11,ch12,ch13,ch14, ch15,ch16,ch17,ch18)
+        INSERT INTO run_data (run_number,time,    ch01,ch02,ch03,ch04, ch05,ch06,ch07,ch08, ch09,ch10,ch11,ch12, ch13,ch14,ch15,ch16)
         VALUES (?,?,   ?,?,?,?, ?,?,?,?,   ?,?,?,?, ?,?,?,?)
     '''
 

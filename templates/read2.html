@@ -20,26 +20,24 @@ Sixteen channels of RTD data:
 
 <table class="table-status">
     <tr>
-        <th>minute</th>
-        <th>01</th>
-        <th>02</th>
-        <th>03</th>
-        <th>04</th>
-        <th>05</th>
-        <th>06</th>
-        <th>07</th>
-        <th>08</th>
+        <th>1</th>
+        <th>2</th>
+        <th>3</th>
+        <th>4</th>
+        <th>5</th>
+        <th>6</th>
+        <th>7</th>
+        <th>8</th>
+        <th>9</th>
+        <th>10</th>
         <th>11</th>
         <th>12</th>
         <th>13</th>
         <th>14</th>
         <th>15</th>
         <th>16</th>
-        <th>17</th>
-        <th>18</th>
     </tr>
     <tr>
-        <td id="t00"></td>
         <td id="t01"></td>
         <td id="t02"></td>
         <td id="t03"></td>
@@ -48,24 +46,50 @@ Sixteen channels of RTD data:
         <td id="t06"></td>
         <td id="t07"></td>
         <td id="t08"></td>
+        <td id="t09"></td>
+        <td id="t10"></td>
         <td id="t11"></td>
         <td id="t12"></td>
         <td id="t13"></td>
         <td id="t14"></td>
         <td id="t15"></td>
         <td id="t16"></td>
-        <td id="t17"></td>
-        <td id="t18"></td>
     </tr>
-</table>
-
-<table class="table-status">
     <tr>
+        <td id="e01"></td>
+        <td id="e02"></td>
+        <td id="e03"></td>
+        <td id="e04"></td>
+        <td id="e05"></td>
+        <td id="e06"></td>
+        <td id="e07"></td>
+        <td id="e08"></td>
+        <td id="e09"></td>
+        <td id="e10"></td>
+        <td id="e11"></td>
+        <td id="e12"></td>
+        <td id="e13"></td>
+        <td id="e14"></td>
+        <td id="e15"></td>
+        <td id="e16"></td>
+    </tr>
+    <tr>
+        <td id="run_number"></td>
+        <td id="run_time"></td>
+        <td id="average"></td>
+        <td id="error"></td>
         <td><button id="cal_zero">Cal 0</button></td>
         <td><button id="cal_one">Cal 1</button></td>
         <td><button id="cal_load">Load</button></td>
         <td><button id="cal_save">Save</button></td>
         <td><button id="cal_reset">Reset</button></td>
+        <td id="c10"></td>
+        <td id="c11"></td>
+        <td id="c12"></td>
+        <td id="c13"></td>
+        <td id="c14"></td>
+        <td id="c15"></td>
+        <td id="c16"></td>
     </tr>
 </table>
 
@@ -84,111 +108,111 @@ Sixteen channels of RTD data:
                 labels: [],
                 datasets: [
                 {
-                    label: "01",
+                    label: "1",
                     backgroundColor: 'rgb(255, 0, 0)',
                     borderColor: 'rgb(255, 0, 0)',
                     data: [],
                     fill: false,
                 },
                 {
-                    label: "02",
+                    label: "2",
                     backgroundColor: 'rgb(255, 40, 40)',
                     borderColor: 'rgb(255, 40, 40)',
                     data: [],
                     fill: false,
                 },
                 {
-                    label: "03",
+                    label: "3",
                     backgroundColor: 'rgb(255, 80, 80)',
                     borderColor: 'rgb(255, 80, 80)',
                     data: [],
                     fill: false,
                 },
                 {
-                    label: "04",
+                    label: "4",
                     backgroundColor: 'rgb(255, 120, 120)',
                     borderColor: 'rgb(255, 120, 120)',
                     data: [],
                     fill: false,
                 },
                 {
-                    label: "05",
+                    label: "5",
                     backgroundColor: 'rgb(0, 255, 0)',
                     borderColor: 'rgb(0, 255, 0)',
                     data: [],
                     fill: false,
                 },
                 {
-                    label: "06",
+                    label: "6",
                     backgroundColor: 'rgb(40, 255, 40)',
                     borderColor: 'rgb(40, 255, 40)',
                     data: [],
                     fill: false,
                 },
                 {
-                    label: "07",
+                    label: "7",
                     backgroundColor: 'rgb(80, 255, 80)',
                     borderColor: 'rgb(80, 255, 80)',
                     data: [],
                     fill: false,
                 },
                 {
-                    label: "08",
+                    label: "8",
                     backgroundColor: 'rgb(120, 255, 120)',
                     borderColor: 'rgb(120, 255, 120)',
                     data: [],
                     fill: false,
                 },
                 {
-                    label: "11",
+                    label: "9",
                     backgroundColor: 'rgb(0, 0, 255)',
                     borderColor: 'rgb(0, 0, 255)',
                     data: [],
                     fill: false,
                 },
                 {
-                    label: "12",
+                    label: "10",
                     backgroundColor: 'rgb(40, 40, 255)',
                     borderColor: 'rgb(40, 40, 255)',
                     fill: false,
                 },
                 {
-                    label: "13",
+                    label: "11",
                     backgroundColor: 'rgb(80, 80, 255)',
                     borderColor: 'rgb(80, 80, 255)',
                     data: [],
                     fill: false,
                 },
                 {
-                    label: "14",
+                    label: "12",
                     backgroundColor: 'rgb(120, 120, 255)',
                     borderColor: 'rgb(120, 120, 255)',
                     data: [],
                     fill: false,
                 },
                 {
-                    label: "15",
+                    label: "13",
                     backgroundColor: 'rgb(255, 0, 255)',
-                    borderColor: 'rgb(255, 255, 0)',
+                    borderColor: 'rgb(255, 0, 255)',
                     data: [],
                     fill: false,
                 },
                 {
-                    label: "16",
+                    label: "14",
                     backgroundColor: 'rgb(255, 40, 255)',
                     borderColor: 'rgb(255, 40, 255)',
                     data: [],
                     fill: false,
                 },
                 {
-                    label: "17",
+                    label: "15",
                     backgroundColor: 'rgb(255, 80, 255)',
                     borderColor: 'rgb(255, 80, 255)',
                     data: [],
                     fill: false,
                 },
                 {
-                    label: "18",
+                    label: "16",
                     backgroundColor: 'rgb(255, 120, 255)',
                     borderColor: 'rgb(255, 120, 255)',
                     data: [],
@@ -200,7 +224,7 @@ Sixteen channels of RTD data:
                 responsive: true,
                 title: {
                     display: true,
-                    text: 'RTD Hat 0 and 1'
+                    text: '16 PT100 sensors'
                 },
                 tooltips: {
                     mode: 'null',
@@ -319,9 +343,8 @@ Sixteen channels of RTD data:
             config1.data.datasets[15].data.push(data[17]);
             lineChart1.update();
 
-            // document.getElementById('setpoint').value = data.setpoint.toFixed(1);
-
-            document.getElementById('t00').innerHTML = data[1].toFixed(2);
+            document.getElementById('run_number').innerHTML = data[0].toFixed(1);
+            document.getElementById('run_time').innerHTML = data[1].toFixed(2);
 
             document.getElementById('t01').innerHTML = data[2].toFixed(1);
             document.getElementById('t02').innerHTML = data[3].toFixed(1);
@@ -332,14 +355,14 @@ Sixteen channels of RTD data:
             document.getElementById('t07').innerHTML = data[8].toFixed(1);
             document.getElementById('t08').innerHTML = data[9].toFixed(1);
 
-            document.getElementById('t11').innerHTML = data[10].toFixed(1);
-            document.getElementById('t12').innerHTML = data[11].toFixed(1);
-            document.getElementById('t13').innerHTML = data[12].toFixed(1);
-            document.getElementById('t14').innerHTML = data[13].toFixed(1);
-            document.getElementById('t15').innerHTML = data[14].toFixed(1);
-            document.getElementById('t16').innerHTML = data[15].toFixed(1);
-            document.getElementById('t17').innerHTML = data[16].toFixed(1);
-            document.getElementById('t18').innerHTML = data[17].toFixed(1);
+            document.getElementById('t09').innerHTML = data[10].toFixed(1);
+            document.getElementById('t10').innerHTML = data[11].toFixed(1);
+            document.getElementById('t11').innerHTML = data[12].toFixed(1);
+            document.getElementById('t12').innerHTML = data[13].toFixed(1);
+            document.getElementById('t13').innerHTML = data[14].toFixed(1);
+            document.getElementById('t14').innerHTML = data[15].toFixed(1);
+            document.getElementById('t15').innerHTML = data[16].toFixed(1);
+            document.getElementById('t16').innerHTML = data[17].toFixed(1);
         });
 
     });
