@@ -31,19 +31,31 @@ cal_m = [1.0]*16
 cal_b = [0.0]*16
 cal_coeffs = []
 
-run_number = 1
-
 time0 = time.time()
 timei = 0.0
+nan_count = 0       # NaN sometimes appears in the temperture readings from librtd
+onoff = 0
 
-# NaN sometimes appears in the temperture readings from librtd?
-nan_count = 0
+database_file = './database/calpi1.db'
+db = sql.open(database_file)
+run_number = sql.read_last_run_number(db)
+run_start = sql.read_last_run_start(db)
+run_comment = sql.read_last_run_comment(db)
+emit_refresh = False
+if run_number>0:
+    emit_refresh = True
+
+print(f'STARTUP: last test {run_number} started at {run_start}, comment: {run_comment}')
+
+# Create a mutex to prevent interruption of the controller thread
+lock = threading.Lock()
 
 app = Flask(__name__)
 #app.config['SECRET_KEY'] = 'secret!'
 socketio = SocketIO(app)
 #socketio = SocketIO(app, logger=True, engineio_logger=True)
 
+#-----------------------------------------------------------------------	
 # Make Control C exit properly after turning off the SSRs
 def handler(signum,frame):
     print(" ")
@@ -53,9 +65,7 @@ def handler(signum,frame):
 
 signal.signal(signal.SIGINT, handler)
 
-# Create a mutex to prevent interruption of the controller thread
-lock = threading.Lock()
-	
+#-----------------------------------------------------------------------	
 def emit_data():
     while True:
         with lock:
@@ -68,6 +78,7 @@ def emit_data():
         # Sleep long enough that browser client doesn't overload cpu
         time.sleep(5)
 
+#-----------------------------------------------------------------------	
 def controller():
     # call out globals that are modified within this function
     global timei
@@ -84,34 +95,66 @@ def controller():
     temp = 0
 
     while True:
-        timei = round((1/60)*(time.time()-time0),2)
-        count = count + 1      
+        with lock:
+            timei = round((1/60)*(time.time()-time0),2)
+            count = count + 1      
 
-        # loop over boards (0 and 1) and channels (1 to 8)
-        for board in range(2):
-            for channel in range(1,9):
-                temp = librtd.get(board,channel)                    
-                # if sensor returns NaN don't update the row value
-                if(np.isnan(temp)==False):
-                    temperature[8*board+channel-1] = (temp - cal_b[8*board+channel-1]) / cal_m[8*board+channel-1]
-                else:
-                    nan_count = nan_count+1
+            # loop over boards (0 and 1) and channels (1 to 8)
+            for board in range(2):
+                for channel in range(1,9):
+                    temp = librtd.get(board,channel)                    
+                    # if sensor returns NaN don't update the row value
+                    if(np.isnan(temp)==False):
+                        temperature[8*board+channel-1] = (temp - cal_b[8*board+channel-1]) / cal_m[8*board+channel-1]
+                    else:
+                        nan_count = nan_count+1
 
-                # make a row of data
-                row1 = [run_number, timei]+temperature
+                    # make a row of data
+                    row1 = [run_number, timei]+temperature
 
-        frow1 = [f'{item:.2f}' for item in row1]
-        print(', '.join(frow1))
-        
+            frow1 = [f'{item:.2f}' for item in row1]
+            print(', '.join(frow1))
+            
         # delay 1 second minus the on_time
         time.sleep(1)
-            
+
+#-----------------------------------------------------------------------	
+def record_data():
+    global row1
+    db2 = sql.open(database_file)    
+    while True:
+        if onoff:
+            with lock:
+                sql.insert_run_data(db2,row1)
+        time.sleep(5)
+
+#-----------------------------------------------------------------------	
 #start up threads
 t1 = threading.Thread(target=controller,daemon=True)
 t1.start()
 t2 = threading.Thread(target=emit_data,daemon=True)
 t2.start()
+t3 = threading.Thread(target=record_data,daemon=True)
+t3.start()
 
+#-----------------------------------------------------------------------	
+@socketio.on('update_onoff')			
+def update_onoff(data,run_comment):
+    global onoff
+    global time0
+    global run_number
+    global run_start
+    print("Update on/off to ",data)
+    if data==True:
+        time0=time.time()
+        run_number+=1
+        db3=sql.open(database_file)
+        run_start=datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+        print('starting test %2d at %s, comment = %s' % (run_number,run_start,run_comment))
+        sql.insert_run_summary(db3,(run_number,run_start,run_comment))
+    onoff = data
+
+#-----------------------------------------------------------------------	
 def cal_print():
     global cal_y0
     global cal_y1
@@ -134,6 +177,7 @@ def cal_print():
     print('----- cal_coeffs ------')
     print(cal_coeffs)
 
+#-----------------------------------------------------------------------	
 @socketio.on('cal_zero')			
 def cal_zero():
     global cal_y0
@@ -145,6 +189,7 @@ def cal_zero():
     cal0 = np.mean(cal_y0)
     cal_print()
 
+#-----------------------------------------------------------------------	
 @socketio.on('cal_one')			
 def cal_one():
     global cal_y0
@@ -166,6 +211,7 @@ def cal_one():
     cal_coeffs = list(zip(cal_m,cal_b))
     cal_print()
 
+#-----------------------------------------------------------------------	
 @socketio.on('cal_load')			
 def cal_load():
     global cal_m
@@ -192,6 +238,7 @@ def cal_load():
     cal_b = list(cal_b)
     cal_print()
 
+#-----------------------------------------------------------------------	
 @socketio.on('cal_save')			
 def cal_save():
     global cal_m
@@ -211,6 +258,7 @@ def cal_save():
 
     cal_print()
 
+#-----------------------------------------------------------------------	
 @socketio.on('cal_reset')			
 def cal_reset():
     global cal_m
@@ -227,6 +275,7 @@ def cal_reset():
     cal_coeffs = list(zip(cal_m,cal_b))
     cal_print()
 
+#-----------------------------------------------------------------------	
 # flask webpage main
 @app.route("/")
 def index():

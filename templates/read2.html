@@ -10,13 +10,14 @@
 <!-- 560 x 355 width for 3 columns on screen -->
 <table>
     <tr>
-        <td><canvas id="canvas1" width="1500" height="700"></canvas></td>
+        <td><canvas id="canvas1" width="1500" height="350"></canvas></td>
+    </tr>
+    <tr>
+        <td><canvas id="canvas2" width="1500" height="300"></canvas></td>
     </tr>
 </table>
 
 <!-- <textarea id="text1" cols="100" rows="10"></textarea> -->
-
-Sixteen channels of RTD data:
 
 <table class="table-status">
     <tr>
@@ -74,24 +75,34 @@ Sixteen channels of RTD data:
         <td id="e16"></td>
     </tr>
     <tr>
+        <td><label class="toggle">
+            <input type="checkbox" id="onoff" {% if initial_values['onoff'] %} checked {% endif %}>
+            <span class="slider"></span>
+            <span class="labels" data-on="ON" data-off="OFF"></span>
+        </label></td>
+        <td id="c10">Run Number</td>
         <td id="run_number"></td>
+        <td id="c11">Min</td>
         <td id="run_time"></td>
+        <td id="c12">Mean</td>
         <td id="average"></td>
+        <td id="c13">Delta</td>
         <td id="error"></td>
         <td><button id="cal_zero">Cal 0</button></td>
         <td><button id="cal_one">Cal 1</button></td>
         <td><button id="cal_load">Load</button></td>
         <td><button id="cal_save">Save</button></td>
         <td><button id="cal_reset">Reset</button></td>
-        <td id="c10"></td>
-        <td id="c11"></td>
-        <td id="c12"></td>
-        <td id="c13"></td>
         <td id="c14"></td>
         <td id="c15"></td>
-        <td id="c16"></td>
     </tr>
 </table>
+
+<table class=".table-run">
+    <td><input type="text", id="test_comment" value="{{ initial_values['run_comment'] }}"></td>
+    <td id="test_start" >Started at: {{ initial_values['run_start'] }}</td>
+</table>
+
 
 <!--suppress JSUnresolvedLibraryURL -->
 <script src="static/jquery.min.js"></script>
@@ -224,7 +235,161 @@ Sixteen channels of RTD data:
                 responsive: true,
                 title: {
                     display: true,
-                    text: '16 PT100 sensors'
+                    text: 'Temperature C'
+                },
+                tooltips: {
+                    mode: 'null',
+                    intersect: false,
+                },
+                hover: {
+                    mode: 'null',
+                    intersect: true
+                },
+                scales: {
+                    xAxes: [{
+                        display: true,
+                        scaleLabel: {
+                            display: false,
+                            labelString: 'Time'
+                        },
+                        ticks:{
+                            autoSkip: true,
+                            maxTicksLimit: 10
+                        }
+                    }],
+                    yAxes: [{
+                        display: true,
+                        scaleLabel: {
+                            display: true,
+                            labelString: 'Value'
+                        }
+                    }]
+                }
+            }
+        };
+        const config2 = {
+            type: 'line',
+            data: {
+                labels: [],
+                datasets: [
+                {
+                    label: "1",
+                    backgroundColor: 'rgb(255, 0, 0)',
+                    borderColor: 'rgb(255, 0, 0)',
+                    data: [],
+                    fill: false,
+                },
+                {
+                    label: "2",
+                    backgroundColor: 'rgb(255, 40, 40)',
+                    borderColor: 'rgb(255, 40, 40)',
+                    data: [],
+                    fill: false,
+                },
+                {
+                    label: "3",
+                    backgroundColor: 'rgb(255, 80, 80)',
+                    borderColor: 'rgb(255, 80, 80)',
+                    data: [],
+                    fill: false,
+                },
+                {
+                    label: "4",
+                    backgroundColor: 'rgb(255, 120, 120)',
+                    borderColor: 'rgb(255, 120, 120)',
+                    data: [],
+                    fill: false,
+                },
+                {
+                    label: "5",
+                    backgroundColor: 'rgb(0, 255, 0)',
+                    borderColor: 'rgb(0, 255, 0)',
+                    data: [],
+                    fill: false,
+                },
+                {
+                    label: "6",
+                    backgroundColor: 'rgb(40, 255, 40)',
+                    borderColor: 'rgb(40, 255, 40)',
+                    data: [],
+                    fill: false,
+                },
+                {
+                    label: "7",
+                    backgroundColor: 'rgb(80, 255, 80)',
+                    borderColor: 'rgb(80, 255, 80)',
+                    data: [],
+                    fill: false,
+                },
+                {
+                    label: "8",
+                    backgroundColor: 'rgb(120, 255, 120)',
+                    borderColor: 'rgb(120, 255, 120)',
+                    data: [],
+                    fill: false,
+                },
+                {
+                    label: "9",
+                    backgroundColor: 'rgb(0, 0, 255)',
+                    borderColor: 'rgb(0, 0, 255)',
+                    data: [],
+                    fill: false,
+                },
+                {
+                    label: "10",
+                    backgroundColor: 'rgb(40, 40, 255)',
+                    borderColor: 'rgb(40, 40, 255)',
+                    fill: false,
+                },
+                {
+                    label: "11",
+                    backgroundColor: 'rgb(80, 80, 255)',
+                    borderColor: 'rgb(80, 80, 255)',
+                    data: [],
+                    fill: false,
+                },
+                {
+                    label: "12",
+                    backgroundColor: 'rgb(120, 120, 255)',
+                    borderColor: 'rgb(120, 120, 255)',
+                    data: [],
+                    fill: false,
+                },
+                {
+                    label: "13",
+                    backgroundColor: 'rgb(255, 0, 255)',
+                    borderColor: 'rgb(255, 0, 255)',
+                    data: [],
+                    fill: false,
+                },
+                {
+                    label: "14",
+                    backgroundColor: 'rgb(255, 40, 255)',
+                    borderColor: 'rgb(255, 40, 255)',
+                    data: [],
+                    fill: false,
+                },
+                {
+                    label: "15",
+                    backgroundColor: 'rgb(255, 80, 255)',
+                    borderColor: 'rgb(255, 80, 255)',
+                    data: [],
+                    fill: false,
+                },
+                {
+                    label: "16",
+                    backgroundColor: 'rgb(255, 120, 255)',
+                    borderColor: 'rgb(255, 120, 255)',
+                    data: [],
+                    fill: false,
+                }
+                ],
+            },
+            options: {
+                responsive: true,
+                title: {
+                    display: true,
+                    text: 'Deltas'
                 },
                 tooltips: {
                     mode: 'null',
@@ -258,11 +423,21 @@ Sixteen channels of RTD data:
         };
 
         const context1 = document.getElementById('canvas1').getContext('2d');
+        const context2 = document.getElementById('canvas2').getContext('2d');
 
         const lineChart1 = new Chart(context1, config1);
+        const lineChart2 = new Chart(context2, config2);
 
         // Connect to the Flask-SocketIO server
         const socket = io.connect('http://' + document.domain + ':' + location.port);
+
+        // on/off switch
+        const onoff = document.getElementById('onoff');
+        const test_comment = document.getElementById('test_comment');
+        onoff.onchange = function(){
+            var onoffval = onoff.checked;
+            socket.emit('update_onoff',onoffval,test_comment.value);
+        }
 
         // Cal zero
         const calzero = document.getElementById('cal_zero');
@@ -302,28 +477,29 @@ Sixteen channels of RTD data:
             //document.getElementById('text1').innerHTML = message;
 
             // following line controls the shifting of time axis                          
-            if (config1.data.labels.length === 10000) {
-                config1.data.labels.shift();
-                config2.data.labels.shift();
-                config3.data.labels.shift();
-                config4.data.labels.shift();
-                config1.data.datasets[0].data.shift();
-                config1.data.datasets[1].data.shift();
-                config1.data.datasets[2].data.shift();
-                config1.data.datasets[3].data.shift();
-                config1.data.datasets[4].data.shift();
-                config1.data.datasets[5].data.shift();
-                config1.data.datasets[6].data.shift();
-                config1.data.datasets[7].data.shift();
-                config1.data.datasets[8].data.shift();
-                config1.data.datasets[9].data.shift();
-                config1.data.datasets[10].data.shift();
-                config1.data.datasets[11].data.shift();
-                config1.data.datasets[12].data.shift();
-                config1.data.datasets[13].data.shift();
-                config1.data.datasets[14].data.shift();
-                config1.data.datasets[15].data.shift();
-            }
+            // if (config1.data.labels.length === 10000) {
+            //     config1.data.labels.shift();
+            //     config2.data.labels.shift();
+            //     config3.data.labels.shift();
+            //     config4.data.labels.shift();
+            //     config1.data.datasets[0].data.shift();
+            //     config1.data.datasets[1].data.shift();
+            //     config1.data.datasets[2].data.shift();
+            //     config1.data.datasets[3].data.shift();
+            //     config1.data.datasets[4].data.shift();
+            //     config1.data.datasets[5].data.shift();
+            //     config1.data.datasets[6].data.shift();
+            //     config1.data.datasets[7].data.shift();
+            //     config1.data.datasets[8].data.shift();
+            //     config1.data.datasets[9].data.shift();
+            //     config1.data.datasets[10].data.shift();
+            //     config1.data.datasets[11].data.shift();
+            //     config1.data.datasets[12].data.shift();
+            //     config1.data.datasets[13].data.shift();
+            //     config1.data.datasets[14].data.shift();
+            //     config1.data.datasets[15].data.shift();
+            // }
+
             config1.data.labels.push(data[1]);
             config1.data.datasets[0].data.push(data[2]);
             config1.data.datasets[1].data.push(data[3]);
@@ -343,26 +519,85 @@ Sixteen channels of RTD data:
             config1.data.datasets[15].data.push(data[17]);
             lineChart1.update();
 
-            document.getElementById('run_number').innerHTML = data[0].toFixed(1);
+            document.getElementById('run_number').innerHTML = data[0].toFixed(0);
             document.getElementById('run_time').innerHTML = data[1].toFixed(2);
 
-            document.getElementById('t01').innerHTML = data[2].toFixed(1);
-            document.getElementById('t02').innerHTML = data[3].toFixed(1);
-            document.getElementById('t03').innerHTML = data[4].toFixed(1);
-            document.getElementById('t04').innerHTML = data[5].toFixed(1);
-            document.getElementById('t05').innerHTML = data[6].toFixed(1);
-            document.getElementById('t06').innerHTML = data[7].toFixed(1);
-            document.getElementById('t07').innerHTML = data[8].toFixed(1);
-            document.getElementById('t08').innerHTML = data[9].toFixed(1);
+            document.getElementById('t01').innerHTML = data[2].toFixed(2);
+            document.getElementById('t02').innerHTML = data[3].toFixed(2);
+            document.getElementById('t03').innerHTML = data[4].toFixed(2);
+            document.getElementById('t04').innerHTML = data[5].toFixed(2);
+            document.getElementById('t05').innerHTML = data[6].toFixed(2);
+            document.getElementById('t06').innerHTML = data[7].toFixed(2);
+            document.getElementById('t07').innerHTML = data[8].toFixed(2);
+            document.getElementById('t08').innerHTML = data[9].toFixed(2);
 
-            document.getElementById('t09').innerHTML = data[10].toFixed(1);
-            document.getElementById('t10').innerHTML = data[11].toFixed(1);
-            document.getElementById('t11').innerHTML = data[12].toFixed(1);
-            document.getElementById('t12').innerHTML = data[13].toFixed(1);
-            document.getElementById('t13').innerHTML = data[14].toFixed(1);
-            document.getElementById('t14').innerHTML = data[15].toFixed(1);
-            document.getElementById('t15').innerHTML = data[16].toFixed(1);
-            document.getElementById('t16').innerHTML = data[17].toFixed(1);
+            document.getElementById('t09').innerHTML = data[10].toFixed(2);
+            document.getElementById('t10').innerHTML = data[11].toFixed(2);
+            document.getElementById('t11').innerHTML = data[12].toFixed(2);
+            document.getElementById('t12').innerHTML = data[13].toFixed(2);
+            document.getElementById('t13').innerHTML = data[14].toFixed(2);
+            document.getElementById('t14').innerHTML = data[15].toFixed(2);
+            document.getElementById('t15').innerHTML = data[16].toFixed(2);
+            document.getElementById('t16').innerHTML = data[17].toFixed(2);
+
+            var sum = 0.0;
+            var avg = 0.0;
+            
+            for (var i = 2; i <= 17; i++) {
+                sum += data[i];
+            }
+            avg = sum / 16.0;            
+            document.getElementById('average').innerHTML = avg.toFixed(2);
+
+            var deltas = [];
+            var dsum = 0.0;
+            for (var i = 2; i <= 17; i++) {
+                deltas.push(data[i]-avg);
+                dsum += Math.abs(data[i]-avg);
+            }
+            var delta = dsum/16.0;
+
+            document.getElementById('error').innerHTML = delta.toFixed(2);
+
+            document.getElementById('e01').innerHTML = deltas[0].toFixed(2);
+            document.getElementById('e02').innerHTML = deltas[1].toFixed(2);
+            document.getElementById('e03').innerHTML = deltas[2].toFixed(2);
+            document.getElementById('e04').innerHTML = deltas[3].toFixed(2);
+            document.getElementById('e05').innerHTML = deltas[4].toFixed(2);
+            document.getElementById('e06').innerHTML = deltas[5].toFixed(2);
+            document.getElementById('e07').innerHTML = deltas[6].toFixed(2);
+            document.getElementById('e08').innerHTML = deltas[7].toFixed(2);
+
+            document.getElementById('e09').innerHTML = deltas[8].toFixed(2);
+            document.getElementById('e10').innerHTML = deltas[9].toFixed(2);
+            document.getElementById('e11').innerHTML = deltas[10].toFixed(2);
+            document.getElementById('e12').innerHTML = deltas[11].toFixed(2);
+            document.getElementById('e13').innerHTML = deltas[12].toFixed(2);
+            document.getElementById('e14').innerHTML = deltas[13].toFixed(2);
+            document.getElementById('e15').innerHTML = deltas[14].toFixed(2);
+            document.getElementById('e16').innerHTML = deltas[15].toFixed(2);
+
+            config2.data.labels.push(data[1]);
+            config2.data.datasets[0].data.push(deltas[2]);
+            config2.data.datasets[1].data.push(deltas[3]);
+            config2.data.datasets[2].data.push(deltas[4]);
+            config2.data.datasets[3].data.push(deltas[5]);
+            config2.data.datasets[4].data.push(deltas[6]);
+            config2.data.datasets[5].data.push(deltas[7]);
+            config2.data.datasets[6].data.push(deltas[8]);
+            config2.data.datasets[7].data.push(deltas[9]);
+            config2.data.datasets[8].data.push(deltas[10]);
+            config2.data.datasets[9].data.push(deltas[11]);
+            config2.data.datasets[10].data.push(deltas[12]);
+            config2.data.datasets[11].data.push(deltas[13]);
+            config2.data.datasets[12].data.push(deltas[14]);
+            config2.data.datasets[13].data.push(deltas[15]);
+            config2.data.datasets[14].data.push(deltas[16]);
+            config2.data.datasets[15].data.push(deltas[17]);
+            lineChart2.update();
+
+
+            
         });
 
     });
