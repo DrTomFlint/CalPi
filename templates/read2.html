@@ -10,10 +10,12 @@
 <!-- 560 x 355 width for 3 columns on screen -->
 <table>
     <tr>
-        <td><canvas id="canvas1" width="1500" height="350"></canvas></td>
+        <td><canvas id="canvas1" width="750" height="350"></canvas></td>
+        <td><canvas id="canvas2" width="750" height="350"></canvas></td>
     </tr>
     <tr>
-        <td><canvas id="canvas2" width="1500" height="300"></canvas></td>
+        <td><canvas id="canvas3" width="750" height="300"></canvas></td>
+        <td><canvas id="canvas4" width="750" height="300"></canvas></td>
     </tr>
 </table>
 
@@ -73,6 +75,24 @@
         <td id="e14"></td>
         <td id="e15"></td>
         <td id="e16"></td>
+    </tr>
+    <tr>
+        <td id="adc1"></td>
+        <td id="adc2"></td>
+        <td id="adc3"></td>
+        <td id="adc4"></td>
+        <td id="adc5"></td>
+        <td id="adc6"></td>
+        <td id="adc7"></td>
+        <td id="adc8"></td>
+        <td id="adc9"></td>
+        <td id="adc10"></td>
+        <td id="adc11"></td>
+        <td id="adc12"></td>
+        <td id="adc13"></td>
+        <td id="adc14"></td>
+        <td id="adc15"></td>
+        <td id="adc16"></td>
     </tr>
     <tr>
         <td><label class="toggle">
@@ -421,12 +441,113 @@
                 }
             }
         };
+        const config3 = {
+            type: 'line',
+            data: {
+                labels: [],
+                datasets: [
+                {
+                    label: "1",
+                    backgroundColor: 'rgb(255, 0, 0)',
+                    borderColor: 'rgb(255, 0, 0)',
+                    data: [],
+                    fill: false,
+                },
+                {
+                    label: "2",
+                    backgroundColor: 'rgb(255, 40, 40)',
+                    borderColor: 'rgb(255, 40, 40)',
+                    data: [],
+                    fill: false,
+                },
+                {
+                    label: "3",
+                    backgroundColor: 'rgb(255, 80, 80)',
+                    borderColor: 'rgb(255, 80, 80)',
+                    data: [],
+                    fill: false,
+                },
+                {
+                    label: "4",
+                    backgroundColor: 'rgb(255, 120, 120)',
+                    borderColor: 'rgb(255, 120, 120)',
+                    data: [],
+                    fill: false,
+                },
+                {
+                    label: "5",
+                    backgroundColor: 'rgb(0, 255, 0)',
+                    borderColor: 'rgb(0, 255, 0)',
+                    data: [],
+                    fill: false,
+                },
+                {
+                    label: "6",
+                    backgroundColor: 'rgb(40, 255, 40)',
+                    borderColor: 'rgb(40, 255, 40)',
+                    data: [],
+                    fill: false,
+                },
+                {
+                    label: "7",
+                    backgroundColor: 'rgb(80, 255, 80)',
+                    borderColor: 'rgb(80, 255, 80)',
+                    data: [],
+                    fill: false,
+                },
+                {
+                    label: "8",
+                    backgroundColor: 'rgb(120, 255, 120)',
+                    borderColor: 'rgb(120, 255, 120)',
+                    data: [],
+                    fill: false,
+                }
+                ],
+            },
+            options: {
+                responsive: true,
+                title: {
+                    display: true,
+                    text: 'ADC Volts'
+                },
+                tooltips: {
+                    mode: 'null',
+                    intersect: false,
+                },
+                hover: {
+                    mode: 'null',
+                    intersect: true
+                },
+                scales: {
+                    xAxes: [{
+                        display: true,
+                        scaleLabel: {
+                            display: false,
+                            labelString: 'Time'
+                        },
+                        ticks:{
+                            autoSkip: true,
+                            maxTicksLimit: 10
+                        }
+                    }],
+                    yAxes: [{
+                        display: true,
+                        scaleLabel: {
+                            display: true,
+                            labelString: 'Value'
+                        }
+                    }]
+                }
+            }
+        };
 
         const context1 = document.getElementById('canvas1').getContext('2d');
         const context2 = document.getElementById('canvas2').getContext('2d');
+        const context3 = document.getElementById('canvas3').getContext('2d');
 
         const lineChart1 = new Chart(context1, config1);
         const lineChart2 = new Chart(context2, config2);
+        const lineChart3 = new Chart(context3, config3);
 
         // Connect to the Flask-SocketIO server
         const socket = io.connect('http://' + document.domain + ':' + location.port);
@@ -596,8 +717,26 @@
             config2.data.datasets[15].data.push(deltas[17]);
             lineChart2.update();
 
+            config3.data.labels.push(data[1]);
+            config3.data.datasets[0].data.push(data[18].toFixed(3));
+            config3.data.datasets[1].data.push(data[19].toFixed(3));
+            config3.data.datasets[2].data.push(data[20].toFixed(3));
+            config3.data.datasets[3].data.push(data[21].toFixed(3));
+            config3.data.datasets[4].data.push(data[22].toFixed(3));
+            config3.data.datasets[5].data.push(data[23].toFixed(3));
+            config3.data.datasets[6].data.push(data[24].toFixed(3));
+            config3.data.datasets[7].data.push(data[25].toFixed(3));
+            lineChart3.update();
 
-            
+            document.getElementById('adc1').innerHTML = data[18].toFixed(3);
+            document.getElementById('adc2').innerHTML = data[19].toFixed(3);
+            document.getElementById('adc3').innerHTML = data[20].toFixed(3);
+            document.getElementById('adc4').innerHTML = data[21].toFixed(3);
+            document.getElementById('adc5').innerHTML = data[22].toFixed(3);
+            document.getElementById('adc6').innerHTML = data[23].toFixed(3);
+            document.getElementById('adc7').innerHTML = data[24].toFixed(3);
+            document.getElementById('adc8').innerHTML = data[25].toFixed(3);
+
         });
 
     });

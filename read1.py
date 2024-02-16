@@ -6,6 +6,7 @@
 #====================================================================
 
 import librtd
+import libioplus
 import RPi.GPIO as GPIO
 import scurve
 import time
@@ -21,6 +22,7 @@ import sql
 
 # globals to hold current readings and command
 temperature = [0.0]*16      # a single row of calibrated temperatures
+adc = [0.0]*8               # a single row of adc readings
 row1 = [1,0]+temperature
 
 cal_y0 = [0.0]*16
@@ -36,7 +38,7 @@ timei = 0.0
 nan_count = 0       # NaN sometimes appears in the temperture readings from librtd
 onoff = 0
 
-database_file = './database/calpi1.db'
+database_file = './database/read1.db'
 db = sql.open(database_file)
 run_number = sql.read_last_run_number(db)
 run_start = sql.read_last_run_start(db)
@@ -103,14 +105,17 @@ def controller():
             for board in range(2):
                 for channel in range(1,9):
                     temp = librtd.get(board,channel)                    
-                    # if sensor returns NaN don't update the row value
+                    # if sensor returns NaN don't update the temperature value
                     if(np.isnan(temp)==False):
                         temperature[8*board+channel-1] = (temp - cal_b[8*board+channel-1]) / cal_m[8*board+channel-1]
                     else:
                         nan_count = nan_count+1
 
-                    # make a row of data
-                    row1 = [run_number, timei]+temperature
+            for channel in range(1,9):
+                adc[channel-1] = libioplus.getAdcV(2,channel)
+
+            # make a row of data
+            row1 = [run_number, timei]+temperature+adc
 
             frow1 = [f'{item:.2f}' for item in row1]
             print(', '.join(frow1))
