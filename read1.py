@@ -1,14 +1,21 @@
 #====================================================================
 # read1.py
-# read all the RTDs on the calorimeter
+# 
+# Sequent Hat IDs:
+# RTD lower board: 0
+# RTD upper board: 1
+# IO board: 2
+# Mosfet board: 4
 #
 # DrTomFlint 2 Nov 2023
 #====================================================================
 
 import librtd
 import libioplus
+import lib8mosind as mos
 import RPi.GPIO as GPIO
 import scurve
+import box
 import time
 import signal
 import json
@@ -25,6 +32,25 @@ temperature = [0.0]*16      # a single row of calibrated temperatures
 adc = [0.0]*8               # a single row of adc readings
 row1 = [1,0]+temperature
 
+# main data dictionary
+d = {'box_name':['front','back','top','bottom','left','right'],
+     'box_tempi':[8,1,9,0,11,10],
+     'box_temp':[0.0]*6,
+     'box_outi':[4,5,0,1,6,7],
+     'box_out':[0.0]*6, 
+     'box_set':27.0,
+     'box_integral':[0.0]*6,
+     'tub_name':['front','back','low','mid','high','air'],
+     'tub_tempi':[8,1,9,0,11,10],
+     'tub_temp':[0.0]*6,
+     'time':0
+     }
+
+b_kp = 1.0
+b_ki = 0.1
+b_i = 0         # active box index
+
+# calibration
 cal_y0 = [0.0]*16
 cal_y1 = [0.0]*16
 cal0 = 0.0
@@ -71,10 +97,14 @@ signal.signal(signal.SIGINT, handler)
 def emit_data():
     while True:
         with lock:
-            json_data = json.dumps(row1)
+            # json_data = json.dumps(row1)
             
-            # Send data to the 'update_chart' event
-            socketio.emit('update_chart', json_data)
+            # # Send data to the 'update_chart' event
+            # socketio.emit('update_chart', json_data)
+
+            json_data = json.dumps(d)
+            socketio.emit('update_data', json_data)
+
             #print("emit data {}",json_data)
         
         # Sleep long enough that browser client doesn't overload cpu
@@ -89,6 +119,11 @@ def controller():
     global row1
     global cal_m
     global cal_b
+    global box_fb
+    global box_set
+    global box_out
+    global box_i
+    global d
 
     # local vars
     count = 0  
@@ -99,8 +134,11 @@ def controller():
     while True:
         with lock:
             timei = round((1/60)*(time.time()-time0),2)
+            d['time'] = timei
+
             count = count + 1      
 
+            # read the RTD temperatures and convert to calibrated values
             # loop over boards (0 and 1) and channels (1 to 8)
             for board in range(2):
                 for channel in range(1,9):
@@ -111,26 +149,34 @@ def controller():
                     else:
                         nan_count = nan_count+1
 
+            # read the ADC voltages
             for channel in range(1,9):
                 adc[channel-1] = libioplus.getAdcV(2,channel)
 
-            # make a row of data
-            row1 = [run_number, timei]+temperature+adc
+            # copy compensated data to dictionary, control the box heaters
+            for i in range(6):
+                d['box_temp'][i] = temperature[d['box_tempi'][i]]
+                d['tub_temp'][i] = temperature[d['tub_tempi'][i]]
 
-            frow1 = [f'{item:.2f}' for item in row1]
-            print(', '.join(frow1))
+                if( d['box_set'] - d['box_temp'][i] > 0.0):
+                    d['box_out'][i] = 1
+                else:
+                    d['box_out'][i] = 0
+                    
+                # mos.set(4,b['relayi'][i],b['out'][i]>0)
             
         # delay 1 second minus the on_time
         time.sleep(1)
 
 #-----------------------------------------------------------------------	
+# @TODO: update to use dictionary instead of row
 def record_data():
-    global row1
+    global d
     db2 = sql.open(database_file)    
     while True:
-        if onoff:
-            with lock:
-                sql.insert_run_data(db2,row1)
+        # if onoff:
+        #     with lock:
+        #         sql.insert_run_data(db2,row1)
         time.sleep(5)
 
 #-----------------------------------------------------------------------	
@@ -139,8 +185,8 @@ t1 = threading.Thread(target=controller,daemon=True)
 t1.start()
 t2 = threading.Thread(target=emit_data,daemon=True)
 t2.start()
-t3 = threading.Thread(target=record_data,daemon=True)
-t3.start()
+# t3 = threading.Thread(target=record_data,daemon=True)
+# t3.start()
 
 #-----------------------------------------------------------------------	
 @socketio.on('update_onoff')			

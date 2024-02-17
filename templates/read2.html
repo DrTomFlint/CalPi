@@ -23,58 +23,40 @@
 
 <table class="table-status">
     <tr>
-        <th>1</th>
-        <th>2</th>
-        <th>3</th>
-        <th>4</th>
-        <th>5</th>
-        <th>6</th>
-        <th>7</th>
-        <th>8</th>
-        <th>9</th>
-        <th>10</th>
-        <th>11</th>
-        <th>12</th>
-        <th>13</th>
-        <th>14</th>
-        <th>15</th>
-        <th>16</th>
+        <th>Front</th>
+        <th>Back</th>
+        <th>Top</th>
+        <th>Bottom</th>
+        <th>Left</th>
+        <th>Right</th>
+        <th>Setpoint</th>
+        <th> </th>
+        <th>Front</th>
+        <th>Back</th>
+        <th>Low</th>
+        <th>Mid</th>
+        <th>High</th>
+        <th>Air</th>
+        <th> </th>
+        <th> </th>
     </tr>
     <tr>
-        <td id="t01"></td>
-        <td id="t02"></td>
-        <td id="t03"></td>
-        <td id="t04"></td>
-        <td id="t05"></td>
-        <td id="t06"></td>
-        <td id="t07"></td>
-        <td id="t08"></td>
-        <td id="t09"></td>
-        <td id="t10"></td>
-        <td id="t11"></td>
-        <td id="t12"></td>
-        <td id="t13"></td>
-        <td id="t14"></td>
+        <td id="bFront"></td>
+        <td id="bBack"></td>
+        <td id="bTop"></td>
+        <td id="bBottom"></td>
+        <td id="bLeft"></td>
+        <td id="bRight"></td>
+        <td id="bSetpoint"></td>
+        <td id="spare1"></td>
+        <td id="tFront"></td>
+        <td id="tBack"></td>
+        <td id="tLow"></td>
+        <td id="tMid"></td>
+        <td id="tHigh"></td>
+        <td id="tAir"></td>
         <td id="t15"></td>
         <td id="t16"></td>
-    </tr>
-    <tr>
-        <td id="e01"></td>
-        <td id="e02"></td>
-        <td id="e03"></td>
-        <td id="e04"></td>
-        <td id="e05"></td>
-        <td id="e06"></td>
-        <td id="e07"></td>
-        <td id="e08"></td>
-        <td id="e09"></td>
-        <td id="e10"></td>
-        <td id="e11"></td>
-        <td id="e12"></td>
-        <td id="e13"></td>
-        <td id="e14"></td>
-        <td id="e15"></td>
-        <td id="e16"></td>
     </tr>
     <tr>
         <td id="adc1"></td>
@@ -139,113 +121,51 @@
                 labels: [],
                 datasets: [
                 {
-                    label: "1",
+                    label: "Front",
                     backgroundColor: 'rgb(255, 0, 0)',
                     borderColor: 'rgb(255, 0, 0)',
                     data: [],
                     fill: false,
                 },
                 {
-                    label: "2",
-                    backgroundColor: 'rgb(255, 40, 40)',
-                    borderColor: 'rgb(255, 40, 40)',
-                    data: [],
-                    fill: false,
-                },
-                {
-                    label: "3",
-                    backgroundColor: 'rgb(255, 80, 80)',
-                    borderColor: 'rgb(255, 80, 80)',
-                    data: [],
-                    fill: false,
-                },
-                {
-                    label: "4",
-                    backgroundColor: 'rgb(255, 120, 120)',
-                    borderColor: 'rgb(255, 120, 120)',
-                    data: [],
-                    fill: false,
-                },
-                {
-                    label: "5",
-                    backgroundColor: 'rgb(0, 255, 0)',
+                    label: "Back",
+                    backgroundColor: 'rgb(0, 255, 0, 0)',
                     borderColor: 'rgb(0, 255, 0)',
                     data: [],
                     fill: false,
                 },
                 {
-                    label: "6",
-                    backgroundColor: 'rgb(40, 255, 40)',
-                    borderColor: 'rgb(40, 255, 40)',
+                    label: "Top",
+                    backgroundColor: 'rgb(255, 255, 0)',
+                    borderColor: 'rgb(255, 255, 0)',
                     data: [],
                     fill: false,
                 },
                 {
-                    label: "7",
-                    backgroundColor: 'rgb(80, 255, 80)',
-                    borderColor: 'rgb(80, 255, 80)',
-                    data: [],
-                    fill: false,
-                },
-                {
-                    label: "8",
-                    backgroundColor: 'rgb(120, 255, 120)',
-                    borderColor: 'rgb(120, 255, 120)',
-                    data: [],
-                    fill: false,
-                },
-                {
-                    label: "9",
-                    backgroundColor: 'rgb(0, 0, 255)',
-                    borderColor: 'rgb(0, 0, 255)',
-                    data: [],
-                    fill: false,
-                },
-                {
-                    label: "10",
-                    backgroundColor: 'rgb(40, 40, 255)',
-                    borderColor: 'rgb(40, 40, 255)',
-                    fill: false,
-                },
-                {
-                    label: "11",
-                    backgroundColor: 'rgb(80, 80, 255)',
-                    borderColor: 'rgb(80, 80, 255)',
-                    data: [],
-                    fill: false,
-                },
-                {
-                    label: "12",
-                    backgroundColor: 'rgb(120, 120, 255)',
-                    borderColor: 'rgb(120, 120, 255)',
-                    data: [],
-                    fill: false,
-                },
-                {
-                    label: "13",
+                    label: "Bottom",
                     backgroundColor: 'rgb(255, 0, 255)',
                     borderColor: 'rgb(255, 0, 255)',
                     data: [],
                     fill: false,
                 },
                 {
-                    label: "14",
-                    backgroundColor: 'rgb(255, 40, 255)',
-                    borderColor: 'rgb(255, 40, 255)',
+                    label: "Left",
+                    backgroundColor: 'rgb(0, 255, 255)',
+                    borderColor: 'rgb(0, 255, 255)',
                     data: [],
                     fill: false,
                 },
                 {
-                    label: "15",
-                    backgroundColor: 'rgb(255, 80, 255)',
-                    borderColor: 'rgb(255, 80, 255)',
+                    label: "Right",
+                    backgroundColor: 'rgb(128, 128, 128)',
+                    borderColor: 'rgb(128, 128, 128)',
                     data: [],
                     fill: false,
                 },
                 {
-                    label: "16",
-                    backgroundColor: 'rgb(255, 120, 255)',
-                    borderColor: 'rgb(255, 120, 255)',
+                    label: "Setpoint",
+                    backgroundColor: 'rgb(0, 0, 255)',
+                    borderColor: 'rgb(0, 0 255)',
                     data: [],
                     fill: false,
                 }
@@ -255,7 +175,7 @@
                 responsive: true,
                 title: {
                     display: true,
-                    text: 'Temperature C'
+                    text: 'Box Temperatures'
                 },
                 tooltips: {
                     mode: 'null',
@@ -293,113 +213,44 @@
                 labels: [],
                 datasets: [
                 {
-                    label: "1",
+                    label: "Front",
                     backgroundColor: 'rgb(255, 0, 0)',
                     borderColor: 'rgb(255, 0, 0)',
                     data: [],
                     fill: false,
                 },
                 {
-                    label: "2",
+                    label: "Back",
                     backgroundColor: 'rgb(255, 40, 40)',
                     borderColor: 'rgb(255, 40, 40)',
                     data: [],
                     fill: false,
                 },
                 {
-                    label: "3",
+                    label: "Low",
                     backgroundColor: 'rgb(255, 80, 80)',
                     borderColor: 'rgb(255, 80, 80)',
                     data: [],
                     fill: false,
                 },
                 {
-                    label: "4",
+                    label: "Mid",
                     backgroundColor: 'rgb(255, 120, 120)',
                     borderColor: 'rgb(255, 120, 120)',
                     data: [],
                     fill: false,
                 },
                 {
-                    label: "5",
+                    label: "High",
                     backgroundColor: 'rgb(0, 255, 0)',
                     borderColor: 'rgb(0, 255, 0)',
                     data: [],
                     fill: false,
                 },
                 {
-                    label: "6",
+                    label: "Air",
                     backgroundColor: 'rgb(40, 255, 40)',
                     borderColor: 'rgb(40, 255, 40)',
-                    data: [],
-                    fill: false,
-                },
-                {
-                    label: "7",
-                    backgroundColor: 'rgb(80, 255, 80)',
-                    borderColor: 'rgb(80, 255, 80)',
-                    data: [],
-                    fill: false,
-                },
-                {
-                    label: "8",
-                    backgroundColor: 'rgb(120, 255, 120)',
-                    borderColor: 'rgb(120, 255, 120)',
-                    data: [],
-                    fill: false,
-                },
-                {
-                    label: "9",
-                    backgroundColor: 'rgb(0, 0, 255)',
-                    borderColor: 'rgb(0, 0, 255)',
-                    data: [],
-                    fill: false,
-                },
-                {
-                    label: "10",
-                    backgroundColor: 'rgb(40, 40, 255)',
-                    borderColor: 'rgb(40, 40, 255)',
-                    fill: false,
-                },
-                {
-                    label: "11",
-                    backgroundColor: 'rgb(80, 80, 255)',
-                    borderColor: 'rgb(80, 80, 255)',
-                    data: [],
-                    fill: false,
-                },
-                {
-                    label: "12",
-                    backgroundColor: 'rgb(120, 120, 255)',
-                    borderColor: 'rgb(120, 120, 255)',
-                    data: [],
-                    fill: false,
-                },
-                {
-                    label: "13",
-                    backgroundColor: 'rgb(255, 0, 255)',
-                    borderColor: 'rgb(255, 0, 255)',
-                    data: [],
-                    fill: false,
-                },
-                {
-                    label: "14",
-                    backgroundColor: 'rgb(255, 40, 255)',
-                    borderColor: 'rgb(255, 40, 255)',
-                    data: [],
-                    fill: false,
-                },
-                {
-                    label: "15",
-                    backgroundColor: 'rgb(255, 80, 255)',
-                    borderColor: 'rgb(255, 80, 255)',
-                    data: [],
-                    fill: false,
-                },
-                {
-                    label: "16",
-                    backgroundColor: 'rgb(255, 120, 255)',
-                    borderColor: 'rgb(255, 120, 255)',
                     data: [],
                     fill: false,
                 }
@@ -409,7 +260,7 @@
                 responsive: true,
                 title: {
                     display: true,
-                    text: 'Deltas'
+                    text: 'Tub Temperatures'
                 },
                 tooltips: {
                     mode: 'null',
@@ -441,6 +292,7 @@
                 }
             }
         };
+
         const config3 = {
             type: 'line',
             data: {
@@ -590,156 +442,61 @@
             socket.emit('cal_reset');
         }
 
-        // Listen for the 'update_chart' event from the server
-        socket.on('update_chart', function (message) {
+        // Listen for the 'update_data' event from the server
+
+        // for debugging show the json data in a text box below the graphs
+        //document.getElementById('text1').innerHTML = message;
+
+        // following lines controls the shifting of time axis                          
+        // if (config1.data.labels.length === 10000) {
+        //     config1.data.labels.shift();
+        //     config2.data.labels.shift();
+        //     config1.data.datasets[0].data.shift();
+        //     config1.data.datasets[1].data.shift();
+        //     config1.data.datasets[2].data.shift();
+        // }
+
+        socket.on('update_data', function (message) {
             const data = JSON.parse(message);
 
-            // for debugging show the json data in a text box below the graphs
-            //document.getElementById('text1').innerHTML = message;
-
-            // following line controls the shifting of time axis                          
-            // if (config1.data.labels.length === 10000) {
-            //     config1.data.labels.shift();
-            //     config2.data.labels.shift();
-            //     config3.data.labels.shift();
-            //     config4.data.labels.shift();
-            //     config1.data.datasets[0].data.shift();
-            //     config1.data.datasets[1].data.shift();
-            //     config1.data.datasets[2].data.shift();
-            //     config1.data.datasets[3].data.shift();
-            //     config1.data.datasets[4].data.shift();
-            //     config1.data.datasets[5].data.shift();
-            //     config1.data.datasets[6].data.shift();
-            //     config1.data.datasets[7].data.shift();
-            //     config1.data.datasets[8].data.shift();
-            //     config1.data.datasets[9].data.shift();
-            //     config1.data.datasets[10].data.shift();
-            //     config1.data.datasets[11].data.shift();
-            //     config1.data.datasets[12].data.shift();
-            //     config1.data.datasets[13].data.shift();
-            //     config1.data.datasets[14].data.shift();
-            //     config1.data.datasets[15].data.shift();
-            // }
-
-            config1.data.labels.push(data[1]);
-            config1.data.datasets[0].data.push(data[2]);
-            config1.data.datasets[1].data.push(data[3]);
-            config1.data.datasets[2].data.push(data[4]);
-            config1.data.datasets[3].data.push(data[5]);
-            config1.data.datasets[4].data.push(data[6]);
-            config1.data.datasets[5].data.push(data[7]);
-            config1.data.datasets[6].data.push(data[8]);
-            config1.data.datasets[7].data.push(data[9]);
-            config1.data.datasets[8].data.push(data[10]);
-            config1.data.datasets[9].data.push(data[11]);
-            config1.data.datasets[10].data.push(data[12]);
-            config1.data.datasets[11].data.push(data[13]);
-            config1.data.datasets[12].data.push(data[14]);
-            config1.data.datasets[13].data.push(data[15]);
-            config1.data.datasets[14].data.push(data[16]);
-            config1.data.datasets[15].data.push(data[17]);
+            config1.data.labels.push(data['time']);
+            config1.data.datasets[0].data.push(data['box_temp'][0]);
+            config1.data.datasets[1].data.push(data['box_temp'][1]);
+            config1.data.datasets[2].data.push(data['box_temp'][2]);
+            config1.data.datasets[3].data.push(data['box_temp'][3]);
+            config1.data.datasets[4].data.push(data['box_temp'][4]);
+            config1.data.datasets[5].data.push(data['box_temp'][5]);
+            config1.data.datasets[6].data.push(data['box_set']);
             lineChart1.update();
 
-            document.getElementById('run_number').innerHTML = data[0].toFixed(0);
-            document.getElementById('run_time').innerHTML = data[1].toFixed(2);
-
-            document.getElementById('t01').innerHTML = data[2].toFixed(2);
-            document.getElementById('t02').innerHTML = data[3].toFixed(2);
-            document.getElementById('t03').innerHTML = data[4].toFixed(2);
-            document.getElementById('t04').innerHTML = data[5].toFixed(2);
-            document.getElementById('t05').innerHTML = data[6].toFixed(2);
-            document.getElementById('t06').innerHTML = data[7].toFixed(2);
-            document.getElementById('t07').innerHTML = data[8].toFixed(2);
-            document.getElementById('t08').innerHTML = data[9].toFixed(2);
-
-            document.getElementById('t09').innerHTML = data[10].toFixed(2);
-            document.getElementById('t10').innerHTML = data[11].toFixed(2);
-            document.getElementById('t11').innerHTML = data[12].toFixed(2);
-            document.getElementById('t12').innerHTML = data[13].toFixed(2);
-            document.getElementById('t13').innerHTML = data[14].toFixed(2);
-            document.getElementById('t14').innerHTML = data[15].toFixed(2);
-            document.getElementById('t15').innerHTML = data[16].toFixed(2);
-            document.getElementById('t16').innerHTML = data[17].toFixed(2);
-
-            var sum = 0.0;
-            var avg = 0.0;
-            
-            for (var i = 2; i <= 17; i++) {
-                sum += data[i];
-            }
-            avg = sum / 16.0;            
-            document.getElementById('average').innerHTML = avg.toFixed(2);
-
-            var deltas = [];
-            var dsum = 0.0;
-            for (var i = 2; i <= 17; i++) {
-                deltas.push(data[i]-avg);
-                dsum += Math.abs(data[i]-avg);
-            }
-            var delta = dsum/16.0;
-
-            document.getElementById('error').innerHTML = delta.toFixed(2);
-
-            document.getElementById('e01').innerHTML = deltas[0].toFixed(2);
-            document.getElementById('e02').innerHTML = deltas[1].toFixed(2);
-            document.getElementById('e03').innerHTML = deltas[2].toFixed(2);
-            document.getElementById('e04').innerHTML = deltas[3].toFixed(2);
-            document.getElementById('e05').innerHTML = deltas[4].toFixed(2);
-            document.getElementById('e06').innerHTML = deltas[5].toFixed(2);
-            document.getElementById('e07').innerHTML = deltas[6].toFixed(2);
-            document.getElementById('e08').innerHTML = deltas[7].toFixed(2);
-
-            document.getElementById('e09').innerHTML = deltas[8].toFixed(2);
-            document.getElementById('e10').innerHTML = deltas[9].toFixed(2);
-            document.getElementById('e11').innerHTML = deltas[10].toFixed(2);
-            document.getElementById('e12').innerHTML = deltas[11].toFixed(2);
-            document.getElementById('e13').innerHTML = deltas[12].toFixed(2);
-            document.getElementById('e14').innerHTML = deltas[13].toFixed(2);
-            document.getElementById('e15').innerHTML = deltas[14].toFixed(2);
-            document.getElementById('e16').innerHTML = deltas[15].toFixed(2);
-
-            config2.data.labels.push(data[1]);
-            config2.data.datasets[0].data.push(deltas[2]);
-            config2.data.datasets[1].data.push(deltas[3]);
-            config2.data.datasets[2].data.push(deltas[4]);
-            config2.data.datasets[3].data.push(deltas[5]);
-            config2.data.datasets[4].data.push(deltas[6]);
-            config2.data.datasets[5].data.push(deltas[7]);
-            config2.data.datasets[6].data.push(deltas[8]);
-            config2.data.datasets[7].data.push(deltas[9]);
-            config2.data.datasets[8].data.push(deltas[10]);
-            config2.data.datasets[9].data.push(deltas[11]);
-            config2.data.datasets[10].data.push(deltas[12]);
-            config2.data.datasets[11].data.push(deltas[13]);
-            config2.data.datasets[12].data.push(deltas[14]);
-            config2.data.datasets[13].data.push(deltas[15]);
-            config2.data.datasets[14].data.push(deltas[16]);
-            config2.data.datasets[15].data.push(deltas[17]);
+            config2.data.labels.push(data['time']);
+            config2.data.datasets[0].data.push(data['tub_temp'][0]);
+            config2.data.datasets[1].data.push(data['tub_temp'][1]);
+            config2.data.datasets[2].data.push(data['tub_temp'][2]);
+            config2.data.datasets[3].data.push(data['tub_temp'][3]);
+            config2.data.datasets[4].data.push(data['tub_temp'][4]);
+            config2.data.datasets[5].data.push(data['tub_temp'][5]);
             lineChart2.update();
 
-            config3.data.labels.push(data[1]);
-            config3.data.datasets[0].data.push(data[18].toFixed(3));
-            config3.data.datasets[1].data.push(data[19].toFixed(3));
-            config3.data.datasets[2].data.push(data[20].toFixed(3));
-            config3.data.datasets[3].data.push(data[21].toFixed(3));
-            config3.data.datasets[4].data.push(data[22].toFixed(3));
-            config3.data.datasets[5].data.push(data[23].toFixed(3));
-            config3.data.datasets[6].data.push(data[24].toFixed(3));
-            config3.data.datasets[7].data.push(data[25].toFixed(3));
-            lineChart3.update();
+            document.getElementById('bFront').innerHTML = data['box_temp'][0].toFixed(2);
+            document.getElementById('bBack').innerHTML = data['box_temp'][1].toFixed(2);
+            document.getElementById('bTop').innerHTML = data['box_temp'][2].toFixed(2);
+            document.getElementById('bBottom').innerHTML = data['box_temp'][3].toFixed(2);
+            document.getElementById('bLeft').innerHTML = data['box_temp'][4].toFixed(2);
+            document.getElementById('bRight').innerHTML = data['box_temp'][5].toFixed(2);
+            document.getElementById('bSetpoint').innerHTML = data['box_set'].toFixed(2);
 
-            document.getElementById('adc1').innerHTML = data[18].toFixed(3);
-            document.getElementById('adc2').innerHTML = data[19].toFixed(3);
-            document.getElementById('adc3').innerHTML = data[20].toFixed(3);
-            document.getElementById('adc4').innerHTML = data[21].toFixed(3);
-            document.getElementById('adc5').innerHTML = data[22].toFixed(3);
-            document.getElementById('adc6').innerHTML = data[23].toFixed(3);
-            document.getElementById('adc7').innerHTML = data[24].toFixed(3);
-            document.getElementById('adc8').innerHTML = data[25].toFixed(3);
+            document.getElementById('tFront').innerHTML = data['tub_temp'][0].toFixed(2);
+            document.getElementById('tBack').innerHTML = data['tub_temp'][1].toFixed(2);
+            document.getElementById('tLow').innerHTML = data['tub_temp'][2].toFixed(2);
+            document.getElementById('tMid').innerHTML = data['tub_temp'][3].toFixed(2);
+            document.getElementById('tHigh').innerHTML = data['tub_temp'][4].toFixed(2);
+            document.getElementById('tAir').innerHTML = data['tub_temp'][5].toFixed(2);
 
         });
 
     });
+
 </script>
 </body>
 </html>                    
