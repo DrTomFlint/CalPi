@@ -59,12 +59,12 @@
         <td id="t16"></td>
     </tr>
     <tr>
-        <td id="adc1"></td>
-        <td id="adc2"></td>
-        <td id="adc3"></td>
-        <td id="adc4"></td>
-        <td id="adc5"></td>
-        <td id="adc6"></td>
+        <td id="bOut0"></td>
+        <td id="bOut1"></td>
+        <td id="bOut2"></td>
+        <td id="bOut3"></td>
+        <td id="bOut4"></td>
+        <td id="bOut5"></td>
         <td id="adc7"></td>
         <td id="adc8"></td>
         <td id="adc9"></td>
@@ -114,6 +114,14 @@
 
 <script>
     $(document).ready(function () {
+        const color1 = 'rgb(255, 0, 0)';
+        const color2 = 'rgb(0,255,0)';
+        const color3 = 'rgb(0, 0, 255)';
+        const color4 = 'rgb(255, 255, 0)';
+        const color5 = 'rgb(255, 0, 255)';
+        const color6 = 'rgb(0, 255, 255)';
+        const color7 = 'rgb(120,120,120)';
+        const color8 = 'rgb(40,40,40)';
 
         const config1 = {
             type: 'line',
@@ -122,50 +130,50 @@
                 datasets: [
                 {
                     label: "Front",
-                    backgroundColor: 'rgb(255, 0, 0)',
-                    borderColor: 'rgb(255, 0, 0)',
+                    backgroundColor: color1,
+                    borderColor: color1,
                     data: [],
                     fill: false,
                 },
                 {
                     label: "Back",
-                    backgroundColor: 'rgb(0, 255, 0, 0)',
-                    borderColor: 'rgb(0, 255, 0)',
+                    backgroundColor: color2,
+                    borderColor: color2,
                     data: [],
                     fill: false,
                 },
                 {
                     label: "Top",
-                    backgroundColor: 'rgb(255, 255, 0)',
-                    borderColor: 'rgb(255, 255, 0)',
+                    backgroundColor: color3,
+                    borderColor: color3,
                     data: [],
                     fill: false,
                 },
                 {
                     label: "Bottom",
-                    backgroundColor: 'rgb(255, 0, 255)',
-                    borderColor: 'rgb(255, 0, 255)',
+                    backgroundColor: color4,
+                    borderColor: color4,
                     data: [],
                     fill: false,
                 },
                 {
                     label: "Left",
-                    backgroundColor: 'rgb(0, 255, 255)',
-                    borderColor: 'rgb(0, 255, 255)',
+                    backgroundColor: color5,
+                    borderColor: color5,
                     data: [],
                     fill: false,
                 },
                 {
                     label: "Right",
-                    backgroundColor: 'rgb(128, 128, 128)',
-                    borderColor: 'rgb(128, 128, 128)',
+                    backgroundColor: color6,
+                    borderColor: color6,
                     data: [],
                     fill: false,
                 },
                 {
                     label: "Setpoint",
-                    backgroundColor: 'rgb(0, 0, 255)',
-                    borderColor: 'rgb(0, 0 255)',
+                    backgroundColor: color7,
+                    borderColor: color7,
                     data: [],
                     fill: false,
                 }
@@ -201,7 +209,7 @@
                         display: true,
                         scaleLabel: {
                             display: true,
-                            labelString: 'Value'
+                            labelString: 'Degrees C'
                         }
                     }]
                 }
@@ -214,43 +222,43 @@
                 datasets: [
                 {
                     label: "Front",
-                    backgroundColor: 'rgb(255, 0, 0)',
-                    borderColor: 'rgb(255, 0, 0)',
+                    backgroundColor: color1,
+                    borderColor: color1,
                     data: [],
                     fill: false,
                 },
                 {
                     label: "Back",
-                    backgroundColor: 'rgb(255, 40, 40)',
-                    borderColor: 'rgb(255, 40, 40)',
+                    backgroundColor: color2,
+                    borderColor: color2,
                     data: [],
                     fill: false,
                 },
                 {
                     label: "Low",
-                    backgroundColor: 'rgb(255, 80, 80)',
-                    borderColor: 'rgb(255, 80, 80)',
+                    backgroundColor: color3,
+                    borderColor: color3,
                     data: [],
                     fill: false,
                 },
                 {
                     label: "Mid",
-                    backgroundColor: 'rgb(255, 120, 120)',
-                    borderColor: 'rgb(255, 120, 120)',
+                    backgroundColor: color4,
+                    borderColor: color4,
                     data: [],
                     fill: false,
                 },
                 {
                     label: "High",
-                    backgroundColor: 'rgb(0, 255, 0)',
-                    borderColor: 'rgb(0, 255, 0)',
+                    backgroundColor: color5,
+                    borderColor: color5,
                     data: [],
                     fill: false,
                 },
                 {
                     label: "Air",
-                    backgroundColor: 'rgb(40, 255, 40)',
-                    borderColor: 'rgb(40, 255, 40)',
+                    backgroundColor: color6,
+                    borderColor: color6,
                     data: [],
                     fill: false,
                 }
@@ -286,71 +294,56 @@
                         display: true,
                         scaleLabel: {
                             display: true,
-                            labelString: 'Value'
+                            labelString: 'Degrees C'
                         }
                     }]
                 }
             }
         };
-
         const config3 = {
             type: 'line',
             data: {
                 labels: [],
                 datasets: [
                 {
-                    label: "1",
-                    backgroundColor: 'rgb(255, 0, 0)',
-                    borderColor: 'rgb(255, 0, 0)',
+                    label: "Front",
+                    backgroundColor: color1,
+                    borderColor: color1,
                     data: [],
                     fill: false,
                 },
                 {
-                    label: "2",
-                    backgroundColor: 'rgb(255, 40, 40)',
-                    borderColor: 'rgb(255, 40, 40)',
+                    label: "Back",
+                    backgroundColor: color2,
+                    borderColor: color2,
                     data: [],
                     fill: false,
                 },
                 {
-                    label: "3",
-                    backgroundColor: 'rgb(255, 80, 80)',
-                    borderColor: 'rgb(255, 80, 80)',
+                    label: "Top",
+                    backgroundColor: color3,
+                    borderColor: color3,
                     data: [],
                     fill: false,
                 },
                 {
-                    label: "4",
-                    backgroundColor: 'rgb(255, 120, 120)',
-                    borderColor: 'rgb(255, 120, 120)',
+                    label: "Bottom",
+                    backgroundColor: color4,
+                    borderColor: color4,
                     data: [],
                     fill: false,
                 },
                 {
-                    label: "5",
-                    backgroundColor: 'rgb(0, 255, 0)',
-                    borderColor: 'rgb(0, 255, 0)',
+                    label: "Left",
+                    backgroundColor: color5,
+                    borderColor: color5,
                     data: [],
                     fill: false,
                 },
                 {
-                    label: "6",
-                    backgroundColor: 'rgb(40, 255, 40)',
-                    borderColor: 'rgb(40, 255, 40)',
-                    data: [],
-                    fill: false,
-                },
-                {
-                    label: "7",
-                    backgroundColor: 'rgb(80, 255, 80)',
-                    borderColor: 'rgb(80, 255, 80)',
-                    data: [],
-                    fill: false,
-                },
-                {
-                    label: "8",
-                    backgroundColor: 'rgb(120, 255, 120)',
-                    borderColor: 'rgb(120, 255, 120)',
+                    label: "Right",
+                    backgroundColor: color6,
+                    borderColor: color6,
                     data: [],
                     fill: false,
                 }
@@ -360,7 +353,7 @@
                 responsive: true,
                 title: {
                     display: true,
-                    text: 'ADC Volts'
+                    text: 'Box Outputs'
                 },
                 tooltips: {
                     mode: 'null',
@@ -478,6 +471,15 @@
             config2.data.datasets[5].data.push(data['tub_temp'][5]);
             lineChart2.update();
 
+            config3.data.labels.push(data['time']);
+            config3.data.datasets[0].data.push(data['box_out'][0]);
+            config3.data.datasets[1].data.push(data['box_out'][1]);
+            config3.data.datasets[2].data.push(data['box_out'][2]);
+            config3.data.datasets[3].data.push(data['box_out'][3]);
+            config3.data.datasets[4].data.push(data['box_out'][4]);
+            config3.data.datasets[5].data.push(data['box_out'][5]);
+            lineChart3.update();
+
             document.getElementById('bFront').innerHTML = data['box_temp'][0].toFixed(2);
             document.getElementById('bBack').innerHTML = data['box_temp'][1].toFixed(2);
             document.getElementById('bTop').innerHTML = data['box_temp'][2].toFixed(2);
@@ -493,6 +495,12 @@
             document.getElementById('tHigh').innerHTML = data['tub_temp'][4].toFixed(2);
             document.getElementById('tAir').innerHTML = data['tub_temp'][5].toFixed(2);
 
+            document.getElementById('bOut0').innerHTML = data['box_out'][0].toFixed(2);
+            document.getElementById('bOut1').innerHTML = data['box_out'][1].toFixed(2);
+            document.getElementById('bOut2').innerHTML = data['box_out'][2].toFixed(2);
+            document.getElementById('bOut3').innerHTML = data['box_out'][3].toFixed(2);
+            document.getElementById('bOut4').innerHTML = data['box_out'][4].toFixed(2);
+            document.getElementById('bOut5').innerHTML = data['box_out'][5].toFixed(2);
         });
 
     });
